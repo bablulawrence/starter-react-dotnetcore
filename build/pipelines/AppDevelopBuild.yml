@@ -1,0 +1,64 @@
+# ASP.NET Core
+trigger:
+  branches:
+    include:
+      - develop
+  paths:
+    include:
+      - src/*
+    exclude:
+      - src/Integration/*
+
+pool:
+  vmImage: "windows-latest"
+
+variables:
+  buildConfiguration: "Release"
+
+steps:
+  - task: ReplaceTokens@1
+    inputs:
+      sourcePath: "./src/Web/ClientApp"
+      filePattern: "*.env"
+      tokenRegex: '__(\w+)__'
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: "**/*.csproj"
+      arguments: "--configuration $(buildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "Test"
+    inputs:
+      command: test
+      projects: "**/*tests/*.csproj"
+      arguments: "--configuration $(buildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "Publish"
+    inputs:
+      command: "publish"
+      publishWebProjects: true
+      arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)"
+      zipAfterPublish: true
+
+  - script: dotnet tool install --global dotnet-ef
+    displayName: Install EF core tools
+
+  - script: dotnet ef migrations script --project "./src/Infrastructure/Infrastructure.csproj" --output "./db.sql" --idempotent
+    displayName: Generate DB Script
+
+  - task: CopyFiles@2
+    displayName: "Copy DB Script"
+    inputs:
+      SourceFolder: "$(Agent.BuildDirectory)"
+      Contents: '**\db.sql'
+      TargetFolder: "$(Build.ArtifactStagingDirectory)"
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Upload Artifacts"
+    inputs:
+      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      artifactName: "StarterApp-Build"

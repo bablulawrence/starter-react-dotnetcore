@@ -1,0 +1,32 @@
+.SearchBar {
+	height: 100%;
+}
+
+.SearchBox {
+	border-top-left-radius: 0.25em;
+	border-bottom-left-radius: 0.25em;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-right-style: none;
+	height: 100%;
+	box-shadow: none;
+}
+
+.SearchBox:focus {
+	border-color: none;
+	box-shadow: none;
+}
+
+.SearchBar button {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-top-right-radius: 0.25em;
+	border-bottom-right-radius: 0.25em;
+	border: 1px solid #ced4da;
+	width: 10%;
+	height: 100%;
+}
+
+.SearchBar button:hover {
+	background-color: #007bff;
+}

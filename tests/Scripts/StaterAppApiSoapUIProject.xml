@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="1704e8f4-682f-4985-86fb-032eac867c25" activeEnvironment="Default" name="starter-react-dotnetcore-mvc" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" resourceRoot="" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings/>
+  <con:interface xsi:type="con:RestService" id="bb03f739-b8db-429f-bed0-95b1450120fa" wadlVersion="http://wadl.dev.java.net/2009/02" name="starter-react-dotnetcore-mvc" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:settings/>
+    <con:definitionCache type="TEXT" rootPart=""/>
+    <con:endpoints>
+      
+      
+      
+      
+    <con:endpoint>http://192.168.1.5:3000</con:endpoint><con:endpoint>https://localhost:44374/</con:endpoint><con:endpoint>https://localhost:5001</con:endpoint><con:endpoint>https://starter-app-bl.azurewebsites.net</con:endpoint></con:endpoints>
+    <con:resource name="Get and Create Items" path="/api/items" id="d1ea5f37-43eb-4713-9058-20f46d57628a">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Get Items" id="6415e0d9-939f-422f-9ec1-3d9d980b1c2a" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>0</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element>Response</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>0</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="FAULT">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>401</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="FAULT">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>401</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="FAULT">
+          <con:mediaType>text/plain</con:mediaType>
+          <con:status>500</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE"><con:mediaType>text/html</con:mediaType><con:status>200</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/problem+json; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:con1="https://localhost/api/contents">con1:Fault</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Get Items" id="690d45c0-ace6-4411-b306-5db2ec354bd3" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://localhost/api/contents</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+      <con:method name="Create Item" id="db0a9035-6577-4586-9e23-edaba34fd1a5" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>201</con:status>
+          <con:params/>
+          <con:element xmlns:con1="https://localhost/api/contents">con1:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>401</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="FAULT">
+          <con:mediaType>application/problem+json; charset=utf-8</con:mediaType>
+          <con:status>400</con:status>
+          <con:params/>
+          <con:element xmlns:con1="https://localhost/api/contents">con1:Fault</con:element>
+        </con:representation>
+        <con:representation type="FAULT">
+          <con:mediaType>text/plain</con:mediaType>
+          <con:status>500</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>0</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>403</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>403</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>500</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Create Item" id="da722938-4bf4-482c-a2b3-6489c73592f9" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request>            {
+            "itemId": 37,
+      "title": "Major",
+      "description": "Minor",
+      "fileName": "tick_1597040430469.png"
+            }
+          </con:request>
+          <con:originalUri>https://localhost/api/contents</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="Get, Update and Delete Item by Id" path="/api/items/37" id="71e61300-7c4f-4f76-957a-4b0d895253d0">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Get Item by Id" id="2fa82dbb-6b3a-4d1c-82aa-52c7bd44bbcc" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="FAULT">
+          <con:mediaType>application/problem+json; charset=utf-8</con:mediaType>
+          <con:status>404</con:status>
+          <con:params/>
+          <con:element xmlns:ns="https://bnlwe-da16-d-88039-webapi-01-dev.azurewebsites.net/api/contents/1">ns:Fault</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:ns="https://bnlwe-da16-d-88039-webapi-01-dev.azurewebsites.net/api/contents/1">ns:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Get Item by Id" id="6e40fc95-def4-43b8-9794-65992cb99fd6" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://bnlwe-da16-d-88039-webapi-01-dev.azurewebsites.net/api/contents/1</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+      <con:method name="Update Item by Id" id="146ce067-c8de-4334-8c45-7cab4d57a71a" method="PUT">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:ns="https://localhost/api/contents/2">ns:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain</con:mediaType><con:status>500</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/problem+json; charset=utf-8</con:mediaType><con:status>400</con:status><con:params/><con:element xmlns:ns="https://localhost/api/contents/2">ns:Fault</con:element></con:representation><con:request name="Update Item by Id" id="f29c17b3-acb8-4ae4-af2a-29a74af2713c" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request>            {
+             "itemId": 37,
+      "title": "Major1",
+      "description": "Minor",
+      "fileName": "tick_1597040430469.png"
+            }
+          </con:request>
+          <con:originalUri>https://localhost/api/contents/2</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+      <con:method name="Delete Item by Id" id="2fa82dbb-6b3a-4d1c-82aa-52c7bd44bbcc" method="DELETE">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="FAULT">
+          <con:mediaType>application/problem+json; charset=utf-8</con:mediaType>
+          <con:status>404</con:status>
+          <con:params/>
+          <con:element xmlns:ns="https://bnlwe-da16-d-88039-webapi-01-dev.azurewebsites.net/api/contents/1">ns:Fault</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:ns="https://bnlwe-da16-d-88039-webapi-01-dev.azurewebsites.net/api/contents/1">ns:Response</con:element>
+        </con:representation>
+        <con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Delete Item by Id" id="6e40fc95-def4-43b8-9794-65992cb99fd6" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://bnlwe-da16-d-88039-webapi-01-dev.azurewebsites.net/api/contents/1</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="Get Item Container Key" path="/api/items/key" id="d3df4950-d096-44bf-9d36-76c8948f8e4a">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Get Key" id="cc56d13a-4e31-4889-9371-7e92d48aac43" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:key="https://localhost/api/contents/key">key:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:request name="Get Key" id="2abfedb8-1077-42c4-9f5e-b2e3b567f209" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://localhost/api/contents/key</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  <con:resource name="Item Search Index" path="/api/items/searchindex/38" id="d3df4950-d096-44bf-9d36-76c8948f8e4a">
+      <con:settings/>
+      <con:parameters/>
+      
+    <con:method name="Build index for item" id="cc56d13a-4e31-4889-9371-7e92d48aac43" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:key="https://localhost/api/contents/key">key:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain</con:mediaType><con:status>500</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/problem+json; charset=utf-8</con:mediaType><con:status>400</con:status><con:params/><con:element xmlns:key="https://localhost/api/contents/key">key:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Build Index for item" id="2abfedb8-1077-42c4-9f5e-b2e3b567f209" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://localhost/api/contents/key</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method><con:method name="Delete Index for item" id="cc56d13a-4e31-4889-9371-7e92d48aac43" method="DELETE">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:key="https://localhost/api/contents/key">key:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain</con:mediaType><con:status>500</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/problem+json; charset=utf-8</con:mediaType><con:status>400</con:status><con:params/><con:element xmlns:key="https://localhost/api/contents/key">key:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Delete Index" id="2abfedb8-1077-42c4-9f5e-b2e3b567f209" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://localhost/api/contents/key</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method></con:resource><con:resource name="Item Search" path="/starter" id="d3df4950-d096-44bf-9d36-76c8948f8e4a">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Search Item" id="cc56d13a-4e31-4889-9371-7e92d48aac43" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:key="https://localhost/api/contents/key">key:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain</con:mediaType><con:status>500</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Search Item" id="2abfedb8-1077-42c4-9f5e-b2e3b567f209" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request>            {
+            "SearchFields": ["Title", "Description"]
+            }
+          </con:request>
+          <con:originalUri>https://localhost/api/contents/key</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource><con:resource name="All Item Search Index" path="/api/items/searchindex" id="d3df4950-d096-44bf-9d36-76c8948f8e4a">
+      <con:settings/>
+      <con:parameters/>
+      
+    <con:method name="Build index" id="cc56d13a-4e31-4889-9371-7e92d48aac43" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:key="https://localhost/api/contents/key">key:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain</con:mediaType><con:status>500</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/problem+json; charset=utf-8</con:mediaType><con:status>400</con:status><con:params/><con:element xmlns:key="https://localhost/api/contents/key">key:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Build Index" id="2abfedb8-1077-42c4-9f5e-b2e3b567f209" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://localhost/api/contents/key</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method><con:method name="Delete Index" id="cc56d13a-4e31-4889-9371-7e92d48aac43" method="DELETE">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element xmlns:key="https://localhost/api/contents/key">key:Response</con:element>
+        </con:representation>
+        <con:representation type="FAULT"><con:mediaType>text/html; charset=utf-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>401</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/plain</con:mediaType><con:status>500</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>405</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/problem+json; charset=utf-8</con:mediaType><con:status>400</con:status><con:params/><con:element xmlns:key="https://localhost/api/contents/key">key:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Delete Index" id="2abfedb8-1077-42c4-9f5e-b2e3b567f209" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://localhost:5001</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://localhost/api/contents/key</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>ClientCred</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/>
+          <con:parameters/>
+        </con:request>
+      </con:method></con:resource></con:interface>
+  <con:properties/>
+  <con:wssContainer/>
+  <con:oAuth2ProfileContainer>
+    
+    
+  <con:oAuth2Profile><con:name>Implicit</con:name><con:clientID>https://starter-app-bl.azurewebsites.net</con:clientID><con:authorizationURI>https://login.microsoftonline.com/0b55e01a-573a-4060-b656-d1a3d5815791/oauth2/v2.0/authorize</con:authorizationURI><con:redirectURI>https://starter-app-bl.azurewebsites.net</con:redirectURI><con:accessTokenPosition>HEADER</con:accessTokenPosition><con:oAuth2Flow>IMPLICIT_GRANT</con:oAuth2Flow><con:refreshAccessTokenMethod>AUTOMATIC</con:refreshAccessTokenMethod><con:scope>https://api.starter-app-bl.azurewebsites.net/StarterApp.ReadWrite</con:scope><con:accessTokenStatus>UNKNOWN</con:accessTokenStatus></con:oAuth2Profile><con:oAuth2Profile><con:name>ClientCred</con:name><con:clientID>https://starter-app-bl.azurewebsites.net</con:clientID><con:clientSecret>.767Wajy59Lc0c.6n4OJA3HH_-FuWAK_8g</con:clientSecret><con:accessTokenURI>https://login.microsoftonline.com/0b55e01a-573a-4060-b656-d1a3d5815791/oauth2/v2.0/token</con:accessTokenURI><con:accessToken>eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Imh1Tjk1SXZQZmVocTM0R3pCRFoxR1hHaXJuTSIsImtpZCI6Imh1Tjk1SXZQZmVocTM0R3pCRFoxR1hHaXJuTSJ9.eyJhdWQiOiJodHRwczovL2FwaS5zdGFydGVyLWFwcC1ibC5henVyZXdlYnNpdGVzLm5ldCIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzBiNTVlMDFhLTU3M2EtNDA2MC1iNjU2LWQxYTNkNTgxNTc5MS8iLCJpYXQiOjE1OTcxMTE1NTMsIm5iZiI6MTU5NzExMTU1MywiZXhwIjoxNTk3MTE1NDUzLCJhaW8iOiJFMkJnWU9oY2NaWXJUTGkzdzk4a1pudFJwZVlCQUE9PSIsImFwcGlkIjoiNThjMzg2MDItOTI1My00NWY1LTkyMzItOWMwNGZlZGQxYTAzIiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMGI1NWUwMWEtNTczYS00MDYwLWI2NTYtZDFhM2Q1ODE1NzkxLyIsIm9pZCI6IjBkOGQ3Yzk3LWVjMDAtNGNiYS04MDQ0LTAyMWE5NTYzNjI4MCIsInJvbGVzIjpbIkFkbWluaXN0cmF0b3IiLCJJdGVtTWFuYWdlciJdLCJzdWIiOiIwZDhkN2M5Ny1lYzAwLTRjYmEtODA0NC0wMjFhOTU2MzYyODAiLCJ0aWQiOiIwYjU1ZTAxYS01NzNhLTQwNjAtYjY1Ni1kMWEzZDU4MTU3OTEiLCJ1dGkiOiJJVmJVZFNadjBFT1ZuckE0MW9FTUFRIiwidmVyIjoiMS4wIn0.F_neKY8M6Q-u19XZrMLQ2ld6eAfah55EQXRMKVfbl8DdIX8RU0czxXn1oq6qTFMNmMAmedhBlSc28QOHdrPw3eFTyMPOCzD5rHCHmOZUKiv2dByunaYvSiigyYuKYSsVhHXmMf7Q97SQbng5Jbex5_o87INlbBOnDxu5Ef4FIMgzBmEycsKqmU9TNIkhljqcHZ6gHBNQp1ZkiDY71sqeMd6DpYgrr4IJLIYrERBbuJpUehuPG0k5L-Lsj0nAlItJfLJBep9w7rOguCF4HsGamkvzqcg-AxwF0dojydoqmk4IuowP60LSfX00vsq-jMyK1NBytcBIJUql_831ewJcPQ</con:accessToken><con:accessTokenPosition>HEADER</con:accessTokenPosition><con:oAuth2Flow>CLIENT_CREDENTIALS_GRANT</con:oAuth2Flow><con:refreshAccessTokenMethod>AUTOMATIC</con:refreshAccessTokenMethod><con:scope>https://api.starter-app-bl.azurewebsites.net/.default</con:scope><con:accessTokenStatus>UNKNOWN</con:accessTokenStatus><con:accessTokenStartingStatus>RETRIEVED_FROM_SERVER</con:accessTokenStartingStatus><con:accessTokenExpirationTime>3599</con:accessTokenExpirationTime><con:accessTokenIssuedTime>1597111739</con:accessTokenIssuedTime><con:manualAccessTokenExpirationTimeUnit>SECONDS</con:manualAccessTokenExpirationTimeUnit></con:oAuth2Profile></con:oAuth2ProfileContainer>
+  <con:oAuth1ProfileContainer/>
+  <con:sensitiveInformation/>
+</con:soapui-project>

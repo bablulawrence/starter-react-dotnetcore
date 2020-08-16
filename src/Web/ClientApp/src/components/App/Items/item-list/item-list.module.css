@@ -1,0 +1,24 @@
+.ItemList table {
+	margin-top: 2em;
+}
+
+.Title {
+	word-wrap: break-word;
+	min-width: 100px;
+	max-width: 200px;
+}
+
+.Description {
+	word-wrap: break-word;
+	min-width: 200px;
+	max-width: 300px;
+}
+
+.DateAdded {
+	word-wrap: break-word;
+	min-width: 50px;
+	max-width: 100px;
+}
+.SearchBar {
+	margin-top: 2em;
+}
