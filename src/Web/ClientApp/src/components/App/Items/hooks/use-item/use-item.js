@@ -117,20 +117,9 @@ export default () => {
 				}),
 			});
 			if (response.ok) {
-				const itemId = (await response.json()).itemId;
-				try {
-					const response = await fetch(`/api/items/${itemId}`, {
-						method: 'GET',
-						headers: headers,
-					});
-					if (response.ok) {
-						const item = await response.json();
-						dispatch({ type: ADD_ITEM, payload: item });
-						return true;
-					} else return false;
-				} catch (error) {
-					throw error;
-				}
+				const item = await response.json();
+				dispatch({ type: ADD_ITEM, payload: item });
+				return true;
 			} else return false;
 		} catch (error) {
 			throw error;
@@ -175,19 +164,9 @@ export default () => {
 				}),
 			});
 			if (response.ok) {
-				try {
-					const response = await fetch(`/api/items/${item.itemId}`, {
-						method: 'GET',
-						headers: headers,
-					});
-					if (response.ok) {
-						const item = await response.json();
-						dispatch({ type: UPDATE_ITEM, payload: item });
-						return true;
-					} else return false;
-				} catch (error) {
-					throw error;
-				}
+				const item = await response.json();
+				dispatch({ type: UPDATE_ITEM, payload: item });
+				return true;
 			} else return false;
 		} catch (error) {
 			throw error;
