@@ -5,7 +5,7 @@
     "webAppName": {
       "value": "starter-app"
     },
-    "deploymentsFlags": {
+    "deploymentFlags": {
       "value": {
         "webApp": true
       }
