@@ -10,6 +10,7 @@
         "webApp": true,
         "keyVault": true,
         "keyVaultPolicy": true,
+        "appInsights": true,
         "workspace": true
       }
     }

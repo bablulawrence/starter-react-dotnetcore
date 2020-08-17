@@ -18,6 +18,7 @@
           "webApp": true,
           "keyVault": true,
           "keyVaultPolicy": true,
+          "appInsights": true,
           "workspace": true
         }
       }
@@ -27,6 +28,7 @@
     "webAppName": "[concat(parameters('appName'),'-web-app')]",
     "keyVaultName": "[concat(parameters('appName'),'-key-vault')]",
     "workspaceName": "[concat(parameters('appName'),'-workspace')]",
+    "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
     "templateStoreUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
   },
   "resources": [
@@ -77,6 +79,24 @@
           "workspaceName": { "value": "[variables('workspaceName')]" }
         }
       }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "AppInsights",
+      "condition": "[parameters('deploymentFlags').appInsights]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'app-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": { "value": "[variables('appInsightsName')]" },
+          "workspaceName": { "value": "[variables('workspaceName')]" }
+        }
+      },
+      "dependsOn": ["Workspace"]
     },
     {
       "type": "Microsoft.Resources/deployments",
