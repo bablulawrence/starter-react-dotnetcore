@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "webAppName": {
+    "appName": {
       "type": "string",
       "metadata": {
         "description": "Name of the web app"
@@ -16,6 +16,7 @@
     }
   },
   "variables": {
+    "webAppName": "[concat(parameters('appName'),'-web-app')]",
     "templateStorUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
   },
   "resources": [
@@ -31,7 +32,7 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "webAppName": { "value": "[parameters('webAppName')]" }
+          "webAppName": { "value": "[variables('webAppName')]" }
         }
       }
     }
