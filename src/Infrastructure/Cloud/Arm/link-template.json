@@ -26,6 +26,7 @@
   },
   "variables": {
     "webAppName": "[concat(parameters('appName'),'-web-app')]",
+    "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
     "keyVaultName": "[concat(parameters('appName'),'-key-vault')]",
     "workspaceName": "[concat(parameters('appName'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
@@ -44,7 +45,8 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "webAppName": { "value": "[variables('webAppName')]" }
+          "webAppName": { "value": "[variables('webAppName')]" },
+          "appServicePlanName": { "value": "[variables('appServicePlanName')]" }
         }
       }
     },
