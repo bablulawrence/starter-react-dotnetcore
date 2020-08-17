@@ -6,12 +6,12 @@
       "type": "string",
       "metadata": {
         "description": "Name of the web app"
-      },
-      "deploymentFlags": {
-        "type": "object",
-        "metadata": {
-          "description": "Flags for optionally deploying resources"
-        }
+      }
+    },
+    "deploymentsFlags": {
+      "type": "object",
+      "metadata": {
+        "description": "Flags for optionally deploying resources"
       }
     }
   },
@@ -22,10 +22,10 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "Web App",
-      "condition": "[parameters('deploymentFlags').webApp]",
+      "name": "WebApp",
+      "condition": "[parameters('deploymentsFlags').WebApp]",
       "properties": {
-        "mode": "incremental",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('templateStorUri'), 'web-app.json')]",
           "contentVersion": "1.0.0.0"
