@@ -5,9 +5,10 @@
     "appName": {
       "value": "starter"
     },
-    "deploymentsFlags": {
+    "deploymentFlags": {
       "value": {
-        "WebApp": true
+        "WebApp": false,
+        "KeyVault": true
       }
     }
   }

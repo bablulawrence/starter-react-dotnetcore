@@ -8,10 +8,16 @@
         "description": "Name of the web app"
       }
     },
-    "deploymentsFlags": {
+    "deploymentFlags": {
       "type": "object",
       "metadata": {
         "description": "Flags for optionally deploying resources"
+      },
+      "defaultValue": {
+        "value": {
+          "WebApp": true,
+          "KeyVault": true
+        }
       }
     }
   },
@@ -25,7 +31,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "WebApp",
-      "condition": "[parameters('deploymentsFlags').WebApp]",
+      "condition": "[parameters('deploymentFlags').WebApp]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -41,7 +47,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "KeyVault",
-      "condition": "[parameters('deploymentsFlags').KeyVault]",
+      "condition": "[parameters('deploymentFlags').KeyVault]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -49,7 +55,7 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "webAppName": { "value": "[variables('keyVaultName')]" }
+          "keyVaultName": { "value": "[variables('keyVaultName')]" }
         }
       }
     }
