@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the web app"
+      },
+      "deploymentsFlags": {
+        "type": "object",
+        "metadata": {
+          "description": "Flags for optionally deploying resources"
+        }
+      }
+    }
+  },
+  "variables": {
+    "templateStorUri": "https://raw.githubusercontent.com/bablulawrence/develop/"
+  },
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "Web App",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[parameters('deploymentsFlags').webApp]",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStorUri'), 'web-app.json')]"
+        },
+        "parameters": {
+          "webAppName": { "value": "[parameters('webAppName')]" }
+        }
+      }
+    }
+  ]
+}
