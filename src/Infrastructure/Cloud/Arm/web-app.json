@@ -6,7 +6,15 @@
       "type": "string",
       "defaultValue": "starter-app",
       "metadata": {
-        "description": "Name of the web app name and app service plan "
+        "description": "Name of the web app"
+      },
+      "minLength": 2
+    },
+    "appServicePlanName": {
+      "type": "string",
+      "defaultValue": "starter-app",
+      "metadata": {
+        "description": "Name of app service plan "
       },
       "minLength": 2
     },
@@ -34,7 +42,7 @@
   },
   "variables": {
     "webAppPortalName": "[parameters('webAppName')]",
-    "appServicePlanName": "[concat('asp-', parameters('webAppName'))]"
+    "appServicePlanName": "[parameters('appServicePlanName')]"
   },
   "resources": [
     {
