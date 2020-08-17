@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "name": {
+    "appInsightsName": {
       "type": "string",
       "metadata": {
         "description": "Name of Application Insights resource."
@@ -29,7 +29,7 @@
       "location": "[parameters('location')]",
       "apiVersion": "2020-02-02-preview",
       "properties": {
-        "ApplicationId": "[parameters('name')]",
+        "ApplicationId": "[parameters('appInsightsName')]",
         "Application_Type": "web",
         "Flow_Type": "Redfield",
         "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
