@@ -56,6 +56,9 @@
       "name": "[variables('webAppPortalName')]",
       "location": "[parameters('location')]",
       "kind": "app",
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
       ],
