@@ -15,8 +15,10 @@
       },
       "defaultValue": {
         "value": {
-          "WebApp": true,
-          "KeyVault": true
+          "webApp": true,
+          "keyVault": true,
+          "keyVaultPolicy": true,
+          "workspace": true
         }
       }
     }
@@ -24,6 +26,7 @@
   "variables": {
     "webAppName": "[concat(parameters('appName'),'-web-app')]",
     "keyVaultName": "[concat(parameters('appName'),'-key-vault')]",
+    "workspaceName": "[concat(parameters('appName'),'-workspace')]",
     "templateStoreUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
   },
   "resources": [
@@ -31,7 +34,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "WebApp",
-      "condition": "[parameters('deploymentFlags').WebApp]",
+      "condition": "[parameters('deploymentFlags').webApp]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -47,7 +50,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "KeyVault",
-      "condition": "[parameters('deploymentFlags').KeyVault]",
+      "condition": "[parameters('deploymentFlags').keyVault]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -58,6 +61,40 @@
           "keyVaultName": { "value": "[variables('keyVaultName')]" }
         }
       }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "Workspace",
+      "condition": "[parameters('deploymentFlags').workspace]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'workspace.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "workspaceName": { "value": "[variables('workspaceName')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "KeyVaultPolicy",
+      "condition": "[parameters('deploymentFlags').keyVaultPolicy]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'key-vault-policy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": { "value": "[variables('keyVaultName')]" },
+          "webAppName": { "value": "[variables('webAppName')]" }
+        }
+      },
+      "dependsOn": ["WebApp", "KeyVault"]
     }
   ]
 }

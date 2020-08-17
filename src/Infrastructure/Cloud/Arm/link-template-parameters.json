@@ -7,8 +7,10 @@
     },
     "deploymentFlags": {
       "value": {
-        "WebApp": false,
-        "KeyVault": true
+        "webApp": true,
+        "keyVault": true,
+        "keyVaultPolicy": true,
+        "workspace": true
       }
     }
   }

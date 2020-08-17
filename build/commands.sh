@@ -15,5 +15,6 @@ dotnet ef migrations remove
 dotnet ef migrations script --project "src\Infrastructure\Infrastructure.csproj" --output "src\Infrastructure\bin\db.sql"
 
 az group deployment create -g starter-app-rg --template-file web-app.json --parameters @web-app-parameters.json 
+az group deployment validate -g starter-app-rg --template-file key-vault-policy.json --parameters @key-vault-policy-parameters.json 
 az group deployment create -g starter-app-rg --template-file link-template.json --parameters @link-template-parameters.json 
 az group deployment validate -g starter-app-rg --template-file link-template.json --parameters @link-template-parameters.json 
