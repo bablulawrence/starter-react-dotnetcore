@@ -15,6 +15,7 @@
       },
       "defaultValue": {
         "value": {
+          "storageAccount": true,
           "webApp": true,
           "keyVault": true,
           "keyVaultPolicy": true,
@@ -25,14 +26,31 @@
     }
   },
   "variables": {
-    "webAppName": "[concat(parameters('appName'),'-web-app')]",
+    "storageAccountName": "[concat('stor',uniqueString(resourceGroup().id, parameters('appName')))]",
+    "webAppName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-web-app')]",
     "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
-    "keyVaultName": "[concat(parameters('appName'),'-key-vault')]",
+    "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-key-vault')]",
     "workspaceName": "[concat(parameters('appName'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
     "templateStoreUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
   },
   "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "StorageAccount",
+      "condition": "[parameters('deploymentFlags').storageAccount]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'storage-account.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": { "value": "[variables('storageAccountName')]" }
+        }
+      }
+    },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
