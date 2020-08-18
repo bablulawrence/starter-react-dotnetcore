@@ -9,10 +9,11 @@
       "value": {
         "storageAccount": true,
         "webApp": true,
-        "keyVault": true,
-        "keyVaultPolicy": true,
+        "redisCache": true,
         "appInsights": true,
-        "workspace": true
+        "workspace": true,
+        "keyVault": true,
+        "keyVaultPolicy": true
       }
     }
   }

@@ -17,21 +17,23 @@
         "value": {
           "storageAccount": true,
           "webApp": true,
-          "keyVault": true,
-          "keyVaultPolicy": true,
+          "redisCache": true,
           "appInsights": true,
-          "workspace": true
+          "workspace": true,
+          "keyVault": true,
+          "keyVaultPolicy": true
         }
       }
     }
   },
   "variables": {
     "storageAccountName": "[concat('stor',uniqueString(resourceGroup().id, parameters('appName')))]",
-    "webAppName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-web-app')]",
     "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
-    "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-key-vault')]",
+    "webAppName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-web-app')]",
+    "redisCacheName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-redis-cache')]",
     "workspaceName": "[concat(parameters('appName'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
+    "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-key-vault')]",
     "templateStoreUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
   },
   "resources": [
@@ -71,16 +73,19 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "KeyVault",
-      "condition": "[parameters('deploymentFlags').keyVault]",
+      "name": "RedisCache",
+      "condition": "[parameters('deploymentFlags').redisCache]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'key-vault.json')]",
+          "uri": "[concat(variables('templateStoreUri'), 'redis-cache.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('keyVaultName')]" }
+          "redisCacheName": { "value": "[variables('redisCacheName')]" },
+          "diagnosticsStorageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          }
         }
       }
     },
@@ -117,6 +122,22 @@
         }
       },
       "dependsOn": ["Workspace"]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "KeyVault",
+      "condition": "[parameters('deploymentFlags').keyVault]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'key-vault.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": { "value": "[variables('keyVaultName')]" }
+        }
+      }
     },
     {
       "type": "Microsoft.Resources/deployments",
