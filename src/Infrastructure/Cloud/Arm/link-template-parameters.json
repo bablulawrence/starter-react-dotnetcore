@@ -10,6 +10,7 @@
         "storageAccount": true,
         "webApp": true,
         "redisCache": true,
+        "azureSearch": true,
         "appInsights": true,
         "workspace": true,
         "keyVault": true,

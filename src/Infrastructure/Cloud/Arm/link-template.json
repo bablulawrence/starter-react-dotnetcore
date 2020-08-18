@@ -18,6 +18,7 @@
           "storageAccount": true,
           "webApp": true,
           "redisCache": true,
+          "azureSearch": true,
           "appInsights": true,
           "workspace": true,
           "keyVault": true,
@@ -31,6 +32,7 @@
     "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
     "webAppName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-web-app')]",
     "redisCacheName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-redis-cache')]",
+    "azureSearchName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-azure-search')]",
     "workspaceName": "[concat(parameters('appName'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
     "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-key-vault')]",
@@ -86,6 +88,22 @@
           "diagnosticsStorageAccountName": {
             "value": "[variables('storageAccountName')]"
           }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "AzureSearchCache",
+      "condition": "[parameters('deploymentFlags').azureSearch]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'azure-search.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "azureSearchName": { "value": "[variables('azureSearchName')]" }
         }
       }
     },
