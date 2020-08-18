@@ -58,6 +58,22 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
+      "name": "StorageAccountKey",
+      "condition": "[parameters('deploymentFlags').storageAccount]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'key-vault-secret.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": { "value": "[variables('storageAccountName')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
       "name": "WebApp",
       "condition": "[parameters('deploymentFlags').webApp]",
       "properties": {
