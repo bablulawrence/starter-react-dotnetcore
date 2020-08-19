@@ -35,5 +35,5 @@
         "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
       }
     }
-  ]
+  ]  
 }

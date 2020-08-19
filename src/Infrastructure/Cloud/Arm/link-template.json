@@ -22,7 +22,8 @@
           "appInsights": true,
           "workspace": true,
           "keyVault": true,
-          "keyVaultPolicy": true
+          "keyVaultPolicy": true,
+          "keyVaultSecrets": true
         }
       }
     }
@@ -35,7 +36,7 @@
     "azureSearchName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-azure-search')]",
     "workspaceName": "[concat(parameters('appName'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
-    "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-key-vault')]",
+    "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-kv')]",
     "templateStoreUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
   },
   "resources": [
@@ -48,22 +49,6 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('templateStoreUri'), 'storage-account.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": { "value": "[variables('storageAccountName')]" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
-      "name": "StorageAccountKey",
-      "condition": "[parameters('deploymentFlags').storageAccount]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'key-vault-secret.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -110,7 +95,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "AzureSearchCache",
+      "name": "AzureSearch",
       "condition": "[parameters('deploymentFlags').azureSearch]",
       "properties": {
         "mode": "Incremental",
@@ -190,6 +175,60 @@
         }
       },
       "dependsOn": ["WebApp", "KeyVault"]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "KeyVaultSecrets",
+      "condition": "[parameters('deploymentFlags').keyVaultSecrets]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'key-vault-secrets.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "appInsightsName": {
+            "value": "[variables('appInsightsName')]"
+          },
+          "appInsightsSecretName": {
+            "value": "ApplicationInsights--instrumentationKey"
+          },
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          },
+          "storageAccountSecretName": {
+            "value": "AzureStorageAccount--accountKey"
+          },
+          "redisCacheName": {
+            "value": "[variables('redisCacheName')]"
+          },
+          "redisCacheSecretName": {
+            "value": "RedisCache--key"
+          },
+          "azureSearchName": {
+            "value": "[variables('azureSearchName')]"
+          },
+          "azureSearchSecretName": {
+            "value": "AzureSearch--adminKey"
+          }
+        }
+      },
+      "dependsOn": [
+        "KeyVault",
+        "AppInsights",
+        "StorageAccount",
+        "RedisCache",
+        "AzureSearch"
+      ]
     }
-  ]
+  ],
+  "outputs": {
+    "AppInsKey" : {
+      "value": ""
+    }
+  }
 }

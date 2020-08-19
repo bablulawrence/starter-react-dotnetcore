@@ -7,14 +7,15 @@
     },
     "deploymentFlags": {
       "value": {
-        "storageAccount": true,
-        "webApp": true,
-        "redisCache": true,
-        "azureSearch": true,
+        "storageAccount": false,
+        "webApp": false,
+        "redisCache": false,
+        "azureSearch": false,
         "appInsights": true,
-        "workspace": true,
-        "keyVault": true,
-        "keyVaultPolicy": true
+        "workspace": false,
+        "keyVault": false,
+        "keyVaultPolicy": false,
+        "keyVaultSecrets": true
       }
     }
   }
