@@ -225,10 +225,5 @@
         "AzureSearch"
       ]
     }
-  ],
-  "outputs": {
-    "AppInsKey" : {
-      "value": ""
-    }
-  }
+  ]
 }
