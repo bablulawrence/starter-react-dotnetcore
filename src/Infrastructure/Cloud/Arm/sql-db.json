@@ -1,0 +1,99 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sqlServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Sql server name."
+      }
+    },
+    "sqlDbName": {
+      "type": "string",
+      "metadata": {
+        "type": "string",
+        "metadata": {
+          "description": "Sql server database name"
+        }
+      }
+    },
+    "dbSkuName": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "metadata": {
+        "description": "Database sku name."
+      }
+    },
+    "dbSkuTier": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "metadata": {
+        "description": "Database sku tier."
+      }
+    },
+    "AadTenantId": {
+      "type": "string",
+      "defaultValue": "[subscription().tenantId]",
+      "metadata": {
+        "description": "Azure AD tenant id."
+      }
+    },
+    "dbAdminAadObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure Active directory object id of the AD admin user"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "name": "[parameters('sqlServerName')]",
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2019-06-01-preview",
+      "location": "[parameters('location')]",
+      "properties": {
+        "administratorLogin": "Admin",
+        "administratorLoginPassword": "[uniqueString(resourceGroup().id, deployment().name, newGuid())]",
+        "version": "12.0"
+      },
+      "resources": [
+        {
+          "name": "[parameters('sqlDbName')]",
+          "type": "databases",
+          "apiVersion": "2019-06-01-preview",
+          "location": "[parameters('location')]",
+          "sku": {
+            "name": "[parameters('dbSkuName')]",
+            "tier": "[parameters('dbSkuTier')]"
+          },
+          "properties": {},
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', concat(parameters('sqlServerName')))]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "[concat(parameters('sqlServerName'),'/ActiveDirectory')]",
+      "type": "Microsoft.Sql/servers/administrators",
+      "apiVersion": "2019-06-01-preview",
+      "properties": {
+        "administratorType": "ActiveDirectory",
+        "login": "AadAdmin",
+        "sid": "[parameters('dbAdminAadObjectId')]",
+        "tenantId": "[parameters('AadTenantId')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ]
+    }
+  ]
+}
