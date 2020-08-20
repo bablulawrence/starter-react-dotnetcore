@@ -38,7 +38,7 @@
   },
   "variables": {
     "sqlServerName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-sql-server')]",
-    "sqlDbName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-sql-db')]",
+    "sqlDbName": "[concat(parameters('appName'),'-sql-db')]",
     "storageAccountName": "[concat('stor',uniqueString(resourceGroup().id, parameters('appName')))]",
     "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
     "redisCacheName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-redis-cache')]",
@@ -255,5 +255,47 @@
         "AzureSearch"
       ]
     }
-  ]
+  ],
+  "outputs": {
+    "Storage Account": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').storageAccount]",
+      "value": "[variables('storageAccountName')]"
+    },
+    "Sql Server": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').sqlDatabase]",
+      "value": "[variables('sqlServerName')]"
+    },
+    "Sql Server Database": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').sqlDatabase]",
+      "value": "[variables('sqlDbName')]"
+    },
+    "Redis Cache": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').redisCache]",
+      "value": "[variables('redisCacheName')]"
+    },
+    "Azure Search": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').azureSearch]",
+      "value": "[variables('azureSearchName')]"
+    },
+    "Application Insights": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').appInsights]",
+      "value": "[variables('appInsightsName')]"
+    },
+    "Key Vault": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').keyVault]",
+      "value": "[variables('keyVaultName')]"
+    },
+    "Web App": {
+      "type": "string",
+      "condition": "[parameters('deploymentFlags').webApp]",
+      "value": "[variables('webAppName')]"
+    }
+  }
 }
