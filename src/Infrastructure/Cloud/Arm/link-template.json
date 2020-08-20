@@ -4,8 +4,15 @@
   "parameters": {
     "appName": {
       "type": "string",
+      "defaultValue": "starter",
       "metadata": {
         "description": "Name of the web app"
+      }
+    },
+    "dbAdminAadObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure Active directory object id of the AD admin user"
       }
     },
     "deploymentFlags": {
@@ -15,13 +22,14 @@
       },
       "defaultValue": {
         "value": {
+          "sqlDatabase": true,
           "storageAccount": true,
-          "webApp": true,
           "redisCache": true,
           "azureSearch": true,
           "appInsights": true,
           "workspace": true,
           "keyVault": true,
+          "webApp": true,
           "keyVaultPolicy": true,
           "keyVaultSecrets": true
         }
@@ -29,14 +37,16 @@
     }
   },
   "variables": {
+    "sqlServerName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-sql-server')]",
+    "sqlDbName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-sql-db')]",
     "storageAccountName": "[concat('stor',uniqueString(resourceGroup().id, parameters('appName')))]",
     "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
-    "webAppName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-web-app')]",
     "redisCacheName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-redis-cache')]",
     "azureSearchName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-azure-search')]",
     "workspaceName": "[concat(parameters('appName'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
     "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-kv')]",
+    "webAppName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-web-app')]",
     "templateStoreUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
   },
   "resources": [
@@ -59,17 +69,20 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "WebApp",
-      "condition": "[parameters('deploymentFlags').webApp]",
+      "name": "SqlDatabase",
+      "condition": "[parameters('deploymentFlags').sqlDatabase]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'web-app.json')]",
+          "uri": "[concat(variables('templateStoreUri'), 'sql-db.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "webAppName": { "value": "[variables('webAppName')]" },
-          "appServicePlanName": { "value": "[variables('appServicePlanName')]" }
+          "sqlServerName": { "value": "[variables('sqlServerName')]" },
+          "sqlDbName": { "value": "[variables('sqlDbName')]" },
+          "dbAdminAadObjectId": {
+            "value": "[parameters('dbAdminAadObjectId')]"
+          }
         }
       }
     },
@@ -155,6 +168,23 @@
         },
         "parameters": {
           "keyVaultName": { "value": "[variables('keyVaultName')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "WebApp",
+      "condition": "[parameters('deploymentFlags').webApp]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateStoreUri'), 'web-app.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "webAppName": { "value": "[variables('webAppName')]" },
+          "appServicePlanName": { "value": "[variables('appServicePlanName')]" }
         }
       }
     },
