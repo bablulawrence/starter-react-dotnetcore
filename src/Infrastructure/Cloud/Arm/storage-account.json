@@ -24,6 +24,20 @@
       "metadata": {
         "description": "Location for all resources."
       }
+    },
+    "allowedOrigins": {
+      "type": "string",
+      "defaultValue": "*",
+      "metadata": {
+        "description": "Allowed origins for CORS"
+      }
+    },
+    "containerName": {
+      "type": "string",
+      "defaultValue": "items",
+      "metadata": {
+        "description": "Name of the container"
+      }
     }
   },
   "resources": [
@@ -36,7 +50,41 @@
         "name": "[parameters('storageAccountType')]"
       },
       "kind": "StorageV2",
-      "properties": {}
+      "properties": {},
+      "resources": [
+        {
+          "name": "default",
+          "type": "blobServices",
+          "apiVersion": "2019-04-01",
+          "dependsOn": ["[parameters('storageAccountName')]"],
+          "properties": {
+            "cors": {
+              "corsRules": [
+                {
+                  "allowedOrigins": ["[parameters('allowedOrigins')]"],
+                  "allowedMethods": ["GET", "POST", "PUT", "DELETE", "HEAD"],
+                  "maxAgeInSeconds": 200,
+                  "exposedHeaders": [
+                    "Accept-Ranges,Content-Encoding,Content-Length,Content-Type,Content-Range,*"
+                  ],
+                  "allowedHeaders": [
+                    "Accept-Ranges,Content-Encoding,Content-Length,Content-Type,Content-Range,*"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "blobServices/containers",
+          "apiVersion": "2019-04-01",
+          "name": "[concat('default/', parameters('containerName'))]",
+          "dependsOn": ["[parameters('storageAccountName')]"],
+          "properties": {
+            "publicAccess": "Blob"
+          }
+        }
+      ]
     }
   ]
 }
