@@ -12,6 +12,7 @@ using StarterApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using StarterApp.Infrastructure.Services.Models;
 using System;
+using Microsoft.Data.SqlClient;
 
 namespace StarterApp.Web
 {
@@ -23,6 +24,7 @@ namespace StarterApp.Web
         }
 
         public IConfiguration Configuration { get; }
+
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -38,14 +40,9 @@ namespace StarterApp.Web
             services.AddAuthentication(AzureADDefaults.JwtBearerAuthenticationScheme)
                     .AddAzureADBearer(options => Configuration.Bind("AzureAd", options));
 
-            services.AddDbContext<StarterAppDbContext>(options =>
-                        options.UseSqlServer($@"Server={Configuration["AzureSqlDb:serverName"]};
-                                Initial Catalog={Configuration["AzureSqlDb:databaseName"]};
-                                Persist Security Info=False;
-                                User ID={Configuration["AzureSqlDb:username"]};
-                                Password={Configuration["AzureSqlDb:password"]};
-                                Encrypt=True;TrustServerCertificate=True;
-                                Connection Timeout=30;"));
+            services.AddTransient<IDbTokenService, DbAuthTokenService>();
+
+            services.AddDbContext<StarterAppDbContext>();
 
             services.AddAutoMapper(typeof(StarterApp.Infrastructure.Services.Mappings.MappingProfile),
                                     typeof(StarterApp.Web.Mappings.MappingProfile));
