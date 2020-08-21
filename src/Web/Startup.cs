@@ -57,9 +57,8 @@ namespace StarterApp.Web
                                         ssl=True,abortConnect=False";
             });
 
-            //services.AddDistributedMemoryCache();
             services.AddSingleton<ISearchService>(new SearchService(Configuration["AzureSearch:accountName"],
-                                                    Configuration["AzureSearch:queryKey"]));
+                                                    Configuration["AzureSearch:adminKey"]));
             services.AddSingleton<IStorageService>(new BlobStorageService(Configuration["AzureStorageAccount:accountName"],
                                                                           Configuration["AzureStorageAccount:accountKey"]));
             services.Configure<AzureEnvironment>(Configuration.GetSection("AzureEnvironment"));
