@@ -7,8 +7,6 @@ using System;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Design;
 using System.IO;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
 
 namespace StarterApp.Infrastructure.Data
 {
@@ -43,26 +41,6 @@ namespace StarterApp.Infrastructure.Data
                 if (File.Exists(envAppSettingsFilePath))
                 {
                     config.AddJsonFile(envAppSettingsFilePath);
-                }
-
-                IConfigurationRoot builtConfig = config.Build();
-
-                if (!String.IsNullOrEmpty(builtConfig["KeyVaultName"]))
-                {
-                    var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                    var keyVaultClient = new KeyVaultClient(
-                        new KeyVaultClient.AuthenticationCallback(
-                            azureServiceTokenProvider.KeyVaultTokenCallback));
-
-                    config.AddAzureKeyVault(
-                        $"https://{builtConfig["KeyVaultName"]}.vault.azure.net/",
-                        keyVaultClient,
-                        new DefaultKeyVaultSecretManager());
-                }
-
-                if (env == "Development")
-                {
-                    config.AddUserSecrets<DesignTimeDbContextFactory>();
                 }
 
                 IConfigurationRoot configuration = config.Build();
