@@ -30,6 +30,8 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Publish
         run: dotnet publish --configuration Release -o reactdotnet
+        env:
+          CI: false
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
