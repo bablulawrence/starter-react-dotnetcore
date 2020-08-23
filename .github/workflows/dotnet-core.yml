@@ -11,15 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Setup
       - name: Github checkout
         uses: actions/checkout@v2
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      #Setup, build and test for Api app
+      #Setup, build and test app
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -35,8 +30,7 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
-      #Publish to Azure
-      # deploy web app using Azure credentials
+      #Publish app to azure using app publish profile
       - uses: azure/webapps-deploy@v2
         with:
           package: "./reactdotnet"
