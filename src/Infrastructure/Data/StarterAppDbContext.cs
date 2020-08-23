@@ -17,7 +17,6 @@ namespace StarterApp.Infrastructure.Data
         public StarterAppDbContext(DbContextOptions<StarterAppDbContext> options) : base(options)
         {
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            Console.WriteLine(env);
             if (env != "Development")
             {
                 var connection = (SqlConnection)Database.GetDbConnection();
