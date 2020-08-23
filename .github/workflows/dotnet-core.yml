@@ -11,7 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      # Setup
+      - name: Github checkout
+        uses: actions/checkout@v2
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      #Setup, build and test for Api app
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -22,5 +30,20 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
-      - name: Publish
-        run: dotnet Publish --configuration Release
+
+      #Setup, build and test for client app
+      - name: Setup Node 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: "npm install, build, and test"
+        run: |
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+
+      #Publish to Azure
+      # deploy web app using Azure credentials
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: "starter-lgjsmbvlver5g-web-app"
