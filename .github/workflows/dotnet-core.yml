@@ -35,19 +35,9 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
-      #Setup, build and test for client app
-      - name: Setup Node 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - name: "npm install, build, and test"
-        run: |
-          npm install ./src/web/clientApp
-          npm run build ./src/web/clientApp --if-present
-          npm run test ./src/web/clientApp --if-present
-
       #Publish to Azure
       # deploy web app using Azure credentials
       - uses: azure/webapps-deploy@v2
         with:
           app-name: "starter-lgjsmbvlver5g-web-app"
+          package: "./reactdotnet"
