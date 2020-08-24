@@ -9,7 +9,7 @@ on:
         description: "Azure active directory object id of the database admin user."
 
 jobs:
-  build:
+  deployment:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +26,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az group deployment validate -g $${{ github.event.inputs.resourceGroupName }} \
+            az group deployment validate -g ${{ github.event.inputs.resourceGroupName }} \
             --template-file $GITHUB_WORKSPACE/src/infrastructure/cloud/arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/infrastructure/cloud/arm/link-template-parameters.json  \
-            --parameters dbAdminAadObjectId=$${{ github.event.inputs.dbAdminObjectId }}
+            --parameters dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
