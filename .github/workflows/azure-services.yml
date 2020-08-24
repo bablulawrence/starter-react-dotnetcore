@@ -9,6 +9,7 @@ on:
         description: "Azure active directory object id of the database admin user."
 
 jobs:
+  validate:
   deployment:
     runs-on: ubuntu-latest
 
@@ -26,6 +27,7 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
+            tree $GITHUB_WORKSPACE
             az group deployment validate -g ${{ github.event.inputs.resourceGroupName }} \
             --template-file $GITHUB_WORKSPACE/starter-react-dotnetcore-mvc/src/infrastructure/cloud/arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/starter-react-dotnetcore-mvc/src/infrastructure/cloud/arm/link-template-parameters.json  \
