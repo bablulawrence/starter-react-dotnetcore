@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       resourceGroupName:
-        description: "Azure resource group"
+        description: "Azure resource group name"
       appName:
         description: "App name"
       dbAdminObjectId:
