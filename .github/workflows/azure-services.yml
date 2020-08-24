@@ -5,6 +5,8 @@ on:
     inputs:
       resourceGroupName:
         description: "Azure resource group."
+      appName:
+        description: "Name of the app."
       dbAdminObjectId:
         description: "Azure active directory object id of the database admin user."
 
@@ -27,17 +29,17 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az group deployment validate -g ${{ github.event.inputs.resourceGroupName }} \
+            az deployment group validate -g ${{ github.event.inputs.resourceGroupName }} \
             --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
-            --parameters dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
+            --parameters appName=${{ github.event.inputs.appName }} dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
 
       - name: Deploy ARM templates
         uses: azure/CLI@v1
         with:
           azcliversion: latest
           inlineScript: |
-            az group deployment create -g ${{ github.event.inputs.resourceGroupName }} \
+            az deployment group create -g ${{ github.event.inputs.resourceGroupName }} \
             --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
-            --parameters dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
+            --parameters appName=${{ github.event.inputs.appName }} dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
