@@ -27,6 +27,6 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az group deployment validate -g ${{ github.event.inputs.resourceGroupName }} \
-            --template-file $GITHUB_WORKSPACE/**/arm/link-template.json \
-            --parameters @$GITHUB_WORKSPACE/**/arm/link-template-parameters.json  \
+            --template-file $GITHUB_WORKSPACE/starter-react-dotnetcore-mvc/src/infrastructure/cloud/arm/link-template.json \
+            --parameters @$GITHUB_WORKSPACE/starter-react-dotnetcore-mvc/src/infrastructure/cloud/arm/link-template-parameters.json  \
             --parameters dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
