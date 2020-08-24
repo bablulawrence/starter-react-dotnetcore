@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      #Checkout code
       - name: Github checkout
         uses: actions/checkout@v2
 
@@ -32,7 +31,6 @@ jobs:
         env:
           CI: false
 
-      #Publish app to azure using web app publish profile
       - name: Publish to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
