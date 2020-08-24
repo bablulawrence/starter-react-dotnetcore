@@ -9,7 +9,6 @@ on:
         description: "Azure active directory object id of the database admin user."
 
 jobs:
-  validate:
   deployment:
     runs-on: ubuntu-latest
 
