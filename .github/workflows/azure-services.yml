@@ -1,15 +1,18 @@
-name: Provision azure services
+name: Provision azure resources
 
 on:
   workflow_dispatch:
     inputs:
       resourceGroupName:
-        description: "Azure resource group for provisioning services."
+        description: "Azure resource group name"
+      appName:
+        description: "App name"
       dbAdminObjectId:
-        description: "Azure active directory object id of the database admin user."
+        description: "Azure active directory object id of the database admin user"
 
 jobs:
-  build:
+  deployment:
+    name: Deploy ARM templates
     runs-on: ubuntu-latest
 
     steps:
@@ -21,12 +24,22 @@ jobs:
       - name: Github checkout
         uses: actions/checkout@v2
 
-      - name: Provision Azure services
+      - name: Validate ARM deployment
         uses: azure/CLI@v1
         with:
           azcliversion: latest
           inlineScript: |
-            az group deployment validate -g $${{ github.event.inputs.resourceGroupName }} \
-            --template-file $GITHUB_WORKSPACE/src/infrastructure/cloud/arm/link-template.json \
-            --parameters @$GITHUB_WORKSPACE/src/infrastructure/cloud/arm/link-template-parameters.json  \
-            --parameters dbAdminAadObjectId=$${{ github.event.inputs.dbAdminObjectId }}
+            az deployment group validate -g ${{ github.event.inputs.resourceGroupName }} \
+            --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
+            --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
+            --parameters appName=${{ github.event.inputs.appName }} dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
+
+      - name: Deploy ARM templates
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az deployment group create -g ${{ github.event.inputs.resourceGroupName }} \
+            --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
+            --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
+            --parameters appName=${{ github.event.inputs.appName }} dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}

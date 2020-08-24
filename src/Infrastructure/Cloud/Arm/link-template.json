@@ -34,20 +34,33 @@
           "keyVaultSecrets": true
         }
       }
+    },
+    "uniqueString": {
+      "type": "string",
+      "metadata": {
+        "description": "A unique string for differentiating resources"
+      },
+      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appName'))]"
+    },
+    "templateBaseUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "Base location of the ARM templates"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/master/src/Infrastructure/Cloud/Arm/"
     }
   },
   "variables": {
-    "sqlServerName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-sql-server')]",
+    "sqlServerName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-sql-server')]",
     "sqlDbName": "[concat(parameters('appName'),'-sql-db')]",
-    "storageAccountName": "[concat('stor',uniqueString(resourceGroup().id, parameters('appName')))]",
+    "storageAccountName": "[concat('stor',parameters('uniqueString'))]",
     "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
     "redisCacheName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-redis-cache')]",
     "azureSearchName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-azure-search')]",
     "workspaceName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
-    "keyVaultName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-kv')]",
-    "webAppName": "[concat(parameters('appName'),'-',uniqueString(resourceGroup().id, parameters('appName')),'-web-app')]",
-    "templateStoreUri": "https://raw.githubusercontent.com/bablulawrence/starter-react-dotnetcore-mvc/develop/src/Infrastructure/Cloud/Arm/"
+    "keyVaultName": "[concat('kv-',parameters('uniqueString'))]",
+    "webAppName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-web-app')]"
   },
   "resources": [
     {
@@ -58,7 +71,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'storage-account.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'storage-account.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -74,7 +87,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'sql-db.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'sql-db.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -94,7 +107,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'redis-cache.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'redis-cache.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -113,7 +126,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'azure-search.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'azure-search.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -129,7 +142,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'workspace.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'workspace.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -145,7 +158,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'app-insights.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'app-insights.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -163,7 +176,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'key-vault.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'key-vault.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -179,7 +192,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'web-app.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'web-app.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -196,7 +209,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'key-vault-policy.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'key-vault-policy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -214,7 +227,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateStoreUri'), 'key-vault-secrets.json')]",
+          "uri": "[concat(parameters('templateBaseUrl'), 'key-vault-secrets.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
