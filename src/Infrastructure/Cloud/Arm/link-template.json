@@ -57,7 +57,7 @@
     "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
     "redisCacheName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-redis-cache')]",
     "azureSearchName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-azure-search')]",
-    "workspaceName": "[concat(parameters('appName'),'-workspace')]",
+    "workspaceName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-workspace')]",
     "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
     "keyVaultName": "[concat('kv-',parameters('uniqueString'))]",
     "webAppName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-web-app')]"
