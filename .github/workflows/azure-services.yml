@@ -1,0 +1,32 @@
+name: Provision azure services
+
+on:
+  workflow_dispatch:
+    inputs:
+      resourceGroupName:
+        description: "Azure resource group for provisioning services."
+      dbAdminObjectId:
+        description: "Azure active directory object id of the database admin user."
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Github checkout
+        uses: actions/checkout@v2
+
+      - name: Provision Azure services
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az group deployment validate -g $${{ github.event.inputs.resourceGroupName }} \
+            --template-file $GITHUB_WORKSPACE/src/infrastructure/cloud/arm/link-template.json \
+            --parameters @$GITHUB_WORKSPACE/src/infrastructure/cloud/arm/link-template-parameters.json  \
+            --parameters dbAdminAadObjectId=$${{ github.event.inputs.dbAdminObjectId }}
