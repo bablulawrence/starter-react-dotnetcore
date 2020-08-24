@@ -1,4 +1,4 @@
-name: .NET Core
+name: Deploy web app
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
           CI: false
 
       #Publish app to azure using web app publish profile
-      - name: Publish to Azure Web App
+      - name: Publish to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
           package: "./reactdotnet"
