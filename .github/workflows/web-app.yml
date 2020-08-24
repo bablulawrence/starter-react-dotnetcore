@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: |
-          echo "Log level: ${{ github.event.inputs.logLevel }}"
-          echo "Tags: ${{ github.event.inputs.tags }}"
-
       #Checkout code
       - name: Github checkout
         uses: actions/checkout@v2
@@ -29,15 +25,16 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
       - name: Publish
         run: dotnet publish --configuration Release -o reactdotnet
         env:
           CI: false
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
 
       #Publish app to azure using web app publish profile
-      - uses: azure/webapps-deploy@v2
+      - name: Publish to Azure Web App
+        uses: azure/webapps-deploy@v2
         with:
           package: "./reactdotnet"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE}}
