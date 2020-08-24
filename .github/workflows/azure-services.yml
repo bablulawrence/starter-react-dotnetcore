@@ -26,7 +26,6 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            ls -R $GITHUB_WORKSPACE/src/Infrastructure/
             az group deployment validate -g ${{ github.event.inputs.resourceGroupName }} \
             --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
