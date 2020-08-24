@@ -9,8 +9,8 @@ on:
         description: "Azure active directory object id of the database admin user."
 
 jobs:
-  validate:
-    name: Validate ARM deployment
+  deployment:
+    name: Deploy ARM templates
     runs-on: ubuntu-latest
 
     steps:
@@ -31,19 +31,6 @@ jobs:
             --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
             --parameters dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
-
-  deployment:
-    name: Deploy ARM templates
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Github checkout
-        uses: actions/checkout@v2
 
       - name: Deploy ARM templates
         uses: azure/CLI@v1
