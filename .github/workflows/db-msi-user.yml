@@ -1,0 +1,28 @@
+name: Create Web App MSI database user
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      serverName:
+        description: "Sql server name"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Github checkout
+        uses: actions/checkout@v2
+
+      #Create web app MSI user in Azure SQL database
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/sql-action@v1
+        with:
+          server-name: ${{ github.event.inputs.serverName }}
+          connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
