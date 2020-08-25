@@ -2,11 +2,13 @@ name: Deploy web app
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
     paths:
       - "/src/Web/**"
   pull_request:
-    branches: [master]
+    branches:
+      - master
     paths:
       - "/src/Web/**"
   workflow_dispatch:
