@@ -9,10 +9,12 @@ on:
         description: "Azure resource group name"
 
 jobs:
-  deployment:
+  deployArm:
     name: Deploy ARM templates
     runs-on: ubuntu-latest
-
+    outputs:
+      keyVaultName: ${{ steps.deployArm.outputs.keyVaultName }}
+      sqlServerName: ${{ steps.deployArm.outputs.sqlServerName }}
     steps:
       - name: Login to Azure
         uses: azure/login@v1
@@ -33,6 +35,7 @@ jobs:
             --parameters appName=${{ github.event.inputs.appName }} githubRepository=$GITHUB_REPOSITORY
 
       - name: Deploy ARM templates
+        id: deployArm
         uses: azure/CLI@v1
         with:
           azcliversion: latest
@@ -41,3 +44,19 @@ jobs:
             --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
             --parameters appName=${{ github.event.inputs.appName }} githubRepository=$GITHUB_REPOSITORY
+
+  createDbMsiUser:
+    needs: deployArm
+    name: Add Web App MSI user to database
+    runs-on: windows-latest
+    steps:
+      - uses: Azure/get-keyvault-secrets@v1.0
+        with:
+          keyvault: ${{ needs.deployArm.outputs.keyVaultName }}
+          secrets: "AzureSqlDbAdminPassword"
+
+      - uses: azure/sql-action@v1
+        with:
+          server-name: ${{ needs.deployArm.outputs.sqlServerName }}
+          connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
