@@ -272,42 +272,42 @@
     }
   ],
   "outputs": {
-    "Storage Account": {
+    "storageAccountName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').storageAccount]",
       "value": "[variables('storageAccountName')]"
     },
-    "Sql Server": {
+    "sqlServerName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').sqlDatabase]",
       "value": "[variables('sqlServerName')]"
     },
-    "Sql Server Database": {
+    "sqlServerDatabaseName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').sqlDatabase]",
       "value": "[variables('sqlDbName')]"
     },
-    "Redis Cache": {
+    "redisCacheName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').redisCache]",
       "value": "[variables('redisCacheName')]"
     },
-    "Azure Search": {
+    "azureSearchName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').azureSearch]",
       "value": "[variables('azureSearchName')]"
     },
-    "Application Insights": {
+    "applicationInsightsName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').appInsights]",
       "value": "[variables('appInsightsName')]"
     },
-    "Key Vault": {
+    "keyVaultName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').keyVault]",
       "value": "[variables('keyVaultName')]"
     },
-    "Web App": {
+    "webAppName": {
       "type": "string",
       "condition": "[parameters('deploymentFlags').webApp]",
       "value": "[variables('webAppName')]"
