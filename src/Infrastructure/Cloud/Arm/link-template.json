@@ -96,7 +96,7 @@
           "sqlDbName": { "value": "[variables('sqlDbName')]" },
           "keyVaultName": { "value": "[variables('keyVaultName')]" },
           "dbAdminPwdKvSecretName": {
-            "value": "AzureSqlDb--adminPassword"
+            "value": "AzureSqlDbAdminPassword"
           }
         }
       }
