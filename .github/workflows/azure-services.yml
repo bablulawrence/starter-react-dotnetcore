@@ -3,12 +3,10 @@ name: Provision azure resources
 on:
   workflow_dispatch:
     inputs:
-      resourceGroupName:
-        description: "Azure resource group name"
       appName:
         description: "App name"
-      dbAdminObjectId:
-        description: "Azure active directory object id of the database admin user"
+      resourceGroupName:
+        description: "Azure resource group name"
 
 jobs:
   deployment:
@@ -32,7 +30,7 @@ jobs:
             az deployment group validate -g ${{ github.event.inputs.resourceGroupName }} \
             --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
-            --parameters appName=${{ github.event.inputs.appName }} dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
+            --parameters appName=${{ github.event.inputs.appName }} githubRepository=$GITHUB_REPOSITORY
 
       - name: Deploy ARM templates
         uses: azure/CLI@v1
@@ -42,4 +40,4 @@ jobs:
             az deployment group create -g ${{ github.event.inputs.resourceGroupName }} \
             --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
             --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
-            --parameters appName=${{ github.event.inputs.appName }} dbAdminAadObjectId=${{ github.event.inputs.dbAdminObjectId }}
+            --parameters appName=${{ github.event.inputs.appName }} githubRepository=$GITHUB_REPOSITORY

@@ -8,7 +8,10 @@
     "sqlDbName": {
       "value": "GEN-UNIQUE"
     },
-    "dbAdminAadObjectId": {
+    "dbAdminPwdKvSecretName": {
+      "value": "GEN-UNIQUE"
+    },
+    "keyVaultName": {
       "value": "GEN-UNIQUE"
     }
   }

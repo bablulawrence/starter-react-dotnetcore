@@ -31,17 +31,16 @@
         "description": "Database sku tier."
       }
     },
-    "AadTenantId": {
+    "keyVaultName": {
       "type": "string",
-      "defaultValue": "[subscription().tenantId]",
       "metadata": {
-        "description": "Azure AD tenant id."
+        "description": "Name of the key vault"
       }
     },
-    "dbAdminAadObjectId": {
+    "dbAdminPwdKvSecretName": {
       "type": "string",
       "metadata": {
-        "description": "Azure Active directory object id of the AD admin user"
+        "description": "Name of the key vault secret for storing Azure SQL database admin password"
       }
     },
     "location": {
@@ -109,18 +108,13 @@
       ]
     },
     {
-      "name": "[concat(parameters('sqlServerName'),'/ActiveDirectory')]",
-      "type": "Microsoft.Sql/servers/administrators",
-      "apiVersion": "2019-06-01-preview",
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('dbAdminPwdKvSecretName'))]",
+      "apiVersion": "2018-02-14",
+      "location": "[resourceGroup().location]",
       "properties": {
-        "administratorType": "ActiveDirectory",
-        "login": "AadAdmin",
-        "sid": "[parameters('dbAdminAadObjectId')]",
-        "tenantId": "[parameters('AadTenantId')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
-      ]
+        "value": "[concat(uniqueString(resourceGroup().id, deployment().name, parameters('guid')),parameters('guid'))]"
+      }
     }
   ]
 }
