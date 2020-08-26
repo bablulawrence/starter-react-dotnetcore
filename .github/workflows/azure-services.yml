@@ -32,8 +32,10 @@ jobs:
           scope: resourcegroup
           subscriptionId: ${{ github.event.inputs.subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
-          templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
-          parameters: appName=${{ github.event.inputs.appName }} githubRepository=$GITHUB_REPOSITORY
+          templateLocation: ./src/Infrastructure/Cloud/Arm/link-template.json
+          parameters: ./src/Infrastructure/Cloud/Arm/link-template.json
+            appName=${{ github.event.inputs.appName }}-overriden
+            githubRepository=$GITHUB_REPOSITORY-overriden
 
   createDbMsiUser:
     needs: deployArmJob
