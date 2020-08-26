@@ -33,7 +33,7 @@ jobs:
           subscriptionId: ${{ github.event.inputs.subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
           templateLocation: "src/Infrastructure/Cloud/Arm/link-template.json"
-          parameters: appName=${{ github.event.inputs.appName }} githubRepository=${{ $GITHUB_REPOSITORY }}
+          parameters: appName=${{ github.event.inputs.appName }} githubRepository=${{ github.repository }}
 
   createDbMsiUser:
     needs: deployArmJob
