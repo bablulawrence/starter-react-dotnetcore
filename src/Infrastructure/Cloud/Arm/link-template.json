@@ -22,25 +22,45 @@
       },
       "defaultValue": "master"
     },
-    "deploymentFlags": {
-      "type": "object",
-      "metadata": {
-        "description": "Flags for optionally deploying resources"
-      },
-      "defaultValue": {
-        "value": {
-          "sqlDatabase": true,
-          "storageAccount": true,
-          "redisCache": true,
-          "azureSearch": true,
-          "appInsights": true,
-          "workspace": true,
-          "keyVault": true,
-          "webApp": true,
-          "keyVaultPolicy": true,
-          "keyVaultSecrets": true
-        }
-      }
+    "deploySqlDatabase": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployStorageAccount": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployRedisCache": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployAzureSearch": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployAppInsights": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployWorkspace": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployKeyVault": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployWebApp": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployKeyVaultPolicy": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "deployKeyVaultSecrets": {
+      "type": "bool",
+      "defaultValue": true
     },
     "uniqueString": {
       "type": "string",
@@ -68,7 +88,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "StorageAccount",
-      "condition": "[parameters('deploymentFlags').storageAccount]",
+      "condition": "[parameters('deployStorageAccount')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -84,7 +104,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "SqlDatabase",
-      "condition": "[parameters('deploymentFlags').sqlDatabase]",
+      "condition": "[parameters('deploySqlDatabase')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -105,7 +125,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "RedisCache",
-      "condition": "[parameters('deploymentFlags').redisCache]",
+      "condition": "[parameters('deployRedisCache')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -124,7 +144,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "AzureSearch",
-      "condition": "[parameters('deploymentFlags').azureSearch]",
+      "condition": "[parameters('deployAzureSearch')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -140,7 +160,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "Workspace",
-      "condition": "[parameters('deploymentFlags').workspace]",
+      "condition": "[parameters('deployWorkspace')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -156,7 +176,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "AppInsights",
-      "condition": "[parameters('deploymentFlags').appInsights]",
+      "condition": "[parameters('deployAppInsights')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -174,7 +194,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "KeyVault",
-      "condition": "[parameters('deploymentFlags').keyVault]",
+      "condition": "[parameters('deployKeyVault')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -190,7 +210,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "WebApp",
-      "condition": "[parameters('deploymentFlags').webApp]",
+      "condition": "[parameters('deployWebApp')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -207,7 +227,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "KeyVaultPolicy",
-      "condition": "[parameters('deploymentFlags').keyVaultPolicy]",
+      "condition": "[parameters('deployKeyVaultPolicy')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -225,7 +245,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "KeyVaultSecrets",
-      "condition": "[parameters('deploymentFlags').keyVaultSecrets]",
+      "condition": "[parameters('deployKeyVaultSecrets')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -274,42 +294,42 @@
   "outputs": {
     "storageAccountName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').storageAccount]",
+      "condition": "[parameters('deployStorageAccount')]",
       "value": "[variables('storageAccountName')]"
     },
     "sqlServerName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').sqlDatabase]",
+      "condition": "[parameters('deploySqlDatabase')]",
       "value": "[variables('sqlServerName')]"
     },
     "sqlServerDatabaseName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').sqlDatabase]",
+      "condition": "[parameters('deploySqlDatabase')]",
       "value": "[variables('sqlDbName')]"
     },
     "redisCacheName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').redisCache]",
+      "condition": "[parameters('deployRedisCache')]",
       "value": "[variables('redisCacheName')]"
     },
     "azureSearchName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').azureSearch]",
+      "condition": "[parameters('deployAzureSearch')]",
       "value": "[variables('azureSearchName')]"
     },
     "applicationInsightsName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').appInsights]",
+      "condition": "[parameters('deployAppInsights')]",
       "value": "[variables('appInsightsName')]"
     },
     "keyVaultName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').keyVault]",
+      "condition": "[parameters('deployKeyVault')]",
       "value": "[variables('keyVaultName')]"
     },
     "webAppName": {
       "type": "string",
-      "condition": "[parameters('deploymentFlags').webApp]",
+      "condition": "[parameters('deployWebApp')]",
       "value": "[variables('webAppName')]"
     }
   }
