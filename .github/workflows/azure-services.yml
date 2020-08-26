@@ -32,7 +32,7 @@ jobs:
           scope: resourcegroup
           subscriptionId: ${{ github.event.inputs.subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
-          templateLocation: "src/Infrastructure/Cloud/Arm/link-template.json"
+          templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
           parameters: appName=${{ github.event.inputs.appName }} githubRepository=${{ github.repository }}
 
   createDbMsiUser:
@@ -40,20 +40,28 @@ jobs:
     name: Add Web App MSI user to database
     runs-on: windows-latest
     steps:
-      - uses: Azure/get-keyvault-secrets@v1.0
+      - uses: azure/login@v1
         with:
-          keyvault: ${{ needs.deployArmJob.outputs.keyVaultName }}
-          secrets: "AzureSqlDbAdminPassword"
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: actions/checkout@master
+      - name: Github checkout
+        uses: actions/checkout@v2
+
       - name: Replace web app name in SQL script for adding MSI user
         uses: shitiomatic/str-replace@master
         with:
           find: "web-app-name"
           replace: ${{ needs.deployArmJob.outputs.webAppName }}
+          include: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
+
+      - uses: Azure/get-keyvault-secrets@v1.0
+        id: getDbAdminPassword
+        with:
+          keyvault: ${{ needs.deployArmJob.outputs.keyVaultName }}
+          secrets: "AzureSqlDbAdminPassword"
 
       - uses: azure/sql-action@v1
         with:
           server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}
-          connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          connection-string: ${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }}
           sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
