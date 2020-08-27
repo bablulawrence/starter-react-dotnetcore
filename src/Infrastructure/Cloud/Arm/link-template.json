@@ -357,7 +357,7 @@
       "condition": "[parameters('deploySqlDatabase')]",
       "value": "[variables('sqlServerName')]"
     },
-    "sqlServerDatabaseName": {
+    "sqlDbName": {
       "type": "string",
       "condition": "[parameters('deploySqlDatabase')]",
       "value": "[variables('sqlDbName')]"
