@@ -5,6 +5,8 @@ on:
     inputs:
       appName:
         description: "App name"
+      deployPrincipalId:
+        description: "Deployment service principal id"
       subscriptionId:
         description: "Azure subscription id"
       resourceGroupName:
@@ -14,33 +16,36 @@ jobs:
   deployArmJob:
     name: Deploy ARM templates
     outputs:
-      keyVaultName: ${{ steps.deployArm.outputs.keyVaultName }}
+      almKeyVaultName: ${{ steps.deployArm.outputs.almKeyVaultName }}
       sqlServerName: ${{ steps.deployArm.outputs.sqlServerName }}
       webAppName: ${{ steps.deployArm.outputs.webAppName }}
     runs-on: ubuntu-latest
     steps:
-      - uses: azure/login@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Github checkout
         uses: actions/checkout@v2
 
-      - uses: whiteducksoftware/azure-arm-action-js@v4
+      - name: Deploy ARM templates
+        uses: whiteducksoftware/azure-arm-action-js@v4
         id: deployArm
         with:
           scope: resourcegroup
           subscriptionId: ${{ github.event.inputs.subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
-          parameters: appName=${{ github.event.inputs.appName }} githubRepository=${{ github.repository }}
+          parameters: appName=${{ github.event.inputs.appName }} deployPrincipalId=${{ github.event.inputs.deployPrincipalId }} githubRepository=${{ github.repository }}
 
   createDbMsiUser:
     needs: deployArmJob
     name: Add Web App MSI user to database
     runs-on: windows-latest
     steps:
-      - uses: azure/login@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -51,10 +56,11 @@ jobs:
         run: |
           ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
-      - uses: Azure/get-keyvault-secrets@v1.0
+      - name: Get Azure SQL password from ALM keyvault
+        uses: Azure/get-keyvault-secrets@v1.0
         id: getDbAdminPassword
         with:
-          keyvault: ${{ needs.deployArmJob.outputs.keyVaultName }}
+          keyvault: ${{ needs.deployArmJob.outputs.almKeyVaultName }}
           secrets: "AzureSqlDbAdminPassword"
 
       - uses: azure/sql-action@v1
