@@ -68,7 +68,7 @@ jobs:
         with:
           server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}
           connection-string:
-            Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433
+            Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433;
             Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};
             User ID=sqlAdmin;
             Password=${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }};
