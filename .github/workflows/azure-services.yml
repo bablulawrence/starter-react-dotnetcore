@@ -37,7 +37,9 @@ jobs:
           subscriptionId: ${{ github.event.inputs.subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
-          parameters: appName=${{ github.event.inputs.appName }} deployPrincipalId=${{ github.event.inputs.deployPrincipalId }} githubRepository=${{ github.repository }}
+          parameters: appName=${{ github.event.inputs.appName }}
+            deployPrincipalId=${{ github.event.inputs.deployPrincipalId }}
+            githubRepository=${{ github.repository }}
 
   createDbMsiUser:
     needs: deployArmJob
@@ -56,7 +58,7 @@ jobs:
         run: |
           ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
-      - name: Get Azure SQL password from ALM keyvault
+      - name: Get Azure SQL password from ALM key vault
         uses: Azure/get-keyvault-secrets@v1.0
         id: getDbAdminPassword
         with:
