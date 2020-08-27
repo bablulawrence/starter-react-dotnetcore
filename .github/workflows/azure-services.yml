@@ -64,7 +64,8 @@ jobs:
           keyvault: ${{ needs.deployArmJob.outputs.almKeyVaultName }}
           secrets: "AzureSqlDbAdminPassword"
 
-      - uses: azure/sql-action@v1
+      - name: Run SQL script to add MSI user to database
+        uses: azure/sql-action@v1
         with:
           server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}
           connection-string: Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433;Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};User ID=sqlAdmin;Password=${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }};Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
