@@ -6,7 +6,7 @@ on:
       appName:
         description: "App name"
       deployPrincipalId:
-        description: "Deployment service principal id"
+        description: "Object id of Azure Service Principal"
       subscriptionId:
         description: "Azure subscription id"
       resourceGroupName:
