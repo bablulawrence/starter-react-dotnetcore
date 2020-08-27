@@ -48,11 +48,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Replace web app name in SQL script for adding MSI user
-        uses: shitiomatic/str-replace@master
-        with:
-          find: "web-app-name"
-          replace: ${{ needs.deployArmJob.outputs.webAppName }}
-          include: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
+        run: |
+          ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
       - uses: Azure/get-keyvault-secrets@v1.0
         id: getDbAdminPassword
