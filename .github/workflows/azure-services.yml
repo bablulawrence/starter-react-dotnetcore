@@ -18,6 +18,7 @@ jobs:
     outputs:
       almKeyVaultName: ${{ steps.deployArm.outputs.almKeyVaultName }}
       sqlServerName: ${{ steps.deployArm.outputs.sqlServerName }}
+      sqlDbName: ${{ steps.deployArm.outputs.sqlDbName }}
       webAppName: ${{ steps.deployArm.outputs.webAppName }}
     runs-on: ubuntu-latest
     steps:
@@ -68,5 +69,9 @@ jobs:
       - uses: azure/sql-action@v1
         with:
           server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}
-          connection-string: ${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }}
+          connection-string:
+            Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433
+            Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};
+            User ID=sqlAdmin;
+            Password=${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }};
           sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
