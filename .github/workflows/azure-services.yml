@@ -5,16 +5,21 @@ on:
     inputs:
       appName:
         description: "App name"
+      deployPrincipalId:
+        description: "Deployment service principal id"
+      subscriptionId:
+        description: "Azure subscription id"
       resourceGroupName:
         description: "Azure resource group name"
 
 jobs:
-  deployArm:
+  deployArmJob:
     name: Deploy ARM templates
-    runs-on: ubuntu-latest
     outputs:
-      keyVaultName: ${{ steps.deployArm.outputs.keyVaultName }}
+      almKeyVaultName: ${{ steps.deployArm.outputs.almKeyVaultName }}
       sqlServerName: ${{ steps.deployArm.outputs.sqlServerName }}
+      webAppName: ${{ steps.deployArm.outputs.webAppName }}
+    runs-on: ubuntu-latest
     steps:
       - name: Login to Azure
         uses: azure/login@v1
@@ -24,39 +29,42 @@ jobs:
       - name: Github checkout
         uses: actions/checkout@v2
 
-      - name: Validate ARM deployment
-        uses: azure/CLI@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az deployment group validate -g ${{ github.event.inputs.resourceGroupName }} \
-            --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
-            --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
-            --parameters appName=${{ github.event.inputs.appName }} githubRepository=$GITHUB_REPOSITORY
-
       - name: Deploy ARM templates
+        uses: whiteducksoftware/azure-arm-action-js@v4
         id: deployArm
-        uses: azure/CLI@v1
         with:
-          azcliversion: latest
-          inlineScript: |
-            az deployment group create -g ${{ github.event.inputs.resourceGroupName }} \
-            --template-file $GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template.json \
-            --parameters @$GITHUB_WORKSPACE/src/Infrastructure/Cloud/Arm/link-template-parameters.json  \
-            --parameters appName=${{ github.event.inputs.appName }} githubRepository=$GITHUB_REPOSITORY
+          scope: resourcegroup
+          subscriptionId: ${{ github.event.inputs.subscriptionId }}
+          resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
+          templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
+          parameters: appName=${{ github.event.inputs.appName }} deployPrincipalId=${{ github.event.inputs.deployPrincipalId }} githubRepository=${{ github.repository }}
 
   createDbMsiUser:
-    needs: deployArm
+    needs: deployArmJob
     name: Add Web App MSI user to database
     runs-on: windows-latest
     steps:
-      - uses: Azure/get-keyvault-secrets@v1.0
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          keyvault: ${{ needs.deployArm.outputs.keyVaultName }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Github checkout
+        uses: actions/checkout@v2
+
+      - name: Replace web app name in SQL script for adding MSI user
+        run: |
+          ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
+
+      - name: Get Azure SQL password from ALM keyvault
+        uses: Azure/get-keyvault-secrets@v1.0
+        id: getDbAdminPassword
+        with:
+          keyvault: ${{ needs.deployArmJob.outputs.almKeyVaultName }}
           secrets: "AzureSqlDbAdminPassword"
 
       - uses: azure/sql-action@v1
         with:
-          server-name: ${{ needs.deployArm.outputs.sqlServerName }}
-          connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}
+          connection-string: ${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }}
           sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
