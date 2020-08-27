@@ -5,8 +5,6 @@ on:
     inputs:
       appName:
         description: "App name"
-      deployPrincipalId:
-        description: "Object id of Azure Service Principal"
       subscriptionId:
         description: "Azure subscription id"
       resourceGroupName:
@@ -39,7 +37,7 @@ jobs:
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
           parameters: appName=${{ github.event.inputs.appName }}
-            deployPrincipalId=${{ github.event.inputs.deployPrincipalId }}
+            ServicePrincipalObjectId=${{ secrets.AZURE_SERVICE_PRINCIPAL_OBJECT_ID }}
             githubRepository=${{ github.repository }}
 
   createDbMsiUser:
