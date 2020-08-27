@@ -8,10 +8,10 @@
         "description": "Specifies the name of the key vault."
       }
     },
-    "webAppName": {
+    "objectId": {
       "type": "string",
       "metadata": {
-        "description": "Name of the web app"
+        "description": "Specifies the Azure Active Directory objectId that should be given permissions to the key vault."
       }
     },
     "tenantId": {
@@ -38,7 +38,7 @@
         "accessPolicies": [
           {
             "tenantId": "[parameters('tenantId')]",
-            "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('webAppName')),'2019-08-01', 'Full').identity.principalId]",
+            "objectId": "[parameters('objectId')]",
             "permissions": {
               "secrets": "[parameters('secretsPermissions')]"
             }
