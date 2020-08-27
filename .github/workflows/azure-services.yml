@@ -5,8 +5,6 @@ on:
     inputs:
       appName:
         description: "App name"
-      deployPrincipalId:
-        description: "Deployment service principal id"
       subscriptionId:
         description: "Azure subscription id"
       resourceGroupName:
@@ -18,6 +16,7 @@ jobs:
     outputs:
       almKeyVaultName: ${{ steps.deployArm.outputs.almKeyVaultName }}
       sqlServerName: ${{ steps.deployArm.outputs.sqlServerName }}
+      sqlDbName: ${{ steps.deployArm.outputs.sqlDbName }}
       webAppName: ${{ steps.deployArm.outputs.webAppName }}
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +36,9 @@ jobs:
           subscriptionId: ${{ github.event.inputs.subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
-          parameters: appName=${{ github.event.inputs.appName }} deployPrincipalId=${{ github.event.inputs.deployPrincipalId }} githubRepository=${{ github.repository }}
+          parameters: appName=${{ github.event.inputs.appName }}
+            ServicePrincipalObjectId=${{ secrets.AZURE_SERVICE_PRINCIPAL_OBJECT_ID }}
+            githubRepository=${{ github.repository }}
 
   createDbMsiUser:
     needs: deployArmJob
@@ -56,7 +57,7 @@ jobs:
         run: |
           ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
-      - name: Get Azure SQL password from ALM keyvault
+      - name: Get Azure SQL password from ALM key vault
         uses: Azure/get-keyvault-secrets@v1.0
         id: getDbAdminPassword
         with:
@@ -66,5 +67,9 @@ jobs:
       - uses: azure/sql-action@v1
         with:
           server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}
-          connection-string: ${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }}
+          connection-string:
+            Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433
+            Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};
+            User ID=sqlAdmin;
+            Password=${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }};
           sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"

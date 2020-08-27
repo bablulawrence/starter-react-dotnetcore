@@ -9,7 +9,7 @@
         "description": "Name of the web app"
       }
     },
-    "deployPrincipalId": {
+    "ServicePrincipalObjectId": {
       "type": "string",
       "defaultValue": "starter",
       "metadata": {
@@ -270,7 +270,7 @@
         "parameters": {
           "keyVaultName": { "value": "[variables('almKeyVaultName')]" },
           "objectId": {
-            "value": "[parameters('deployPrincipalId')]"
+            "value": "[parameters('ServicePrincipalObjectId')]"
           }
         }
       },
@@ -357,7 +357,7 @@
       "condition": "[parameters('deploySqlDatabase')]",
       "value": "[variables('sqlServerName')]"
     },
-    "sqlServerDatabaseName": {
+    "sqlDbName": {
       "type": "string",
       "condition": "[parameters('deploySqlDatabase')]",
       "value": "[variables('sqlDbName')]"
