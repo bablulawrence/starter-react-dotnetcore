@@ -268,7 +268,7 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('AppKeyVaultName')]" },
+          "keyVaultName": { "value": "[variables('almKeyVaultName')]" },
           "objectId": {
             "value": "[parameters('deployPrincipalId')]"
           }
@@ -288,7 +288,7 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('AppKeyVaultName')]" },
+          "keyVaultName": { "value": "[variables('appKeyVaultName')]" },
           "objectId": {
             "value": "[reference(resourceId('Microsoft.Web/sites', variables('webAppName')),'2019-08-01', 'Full').identity.principalId]"
           }
