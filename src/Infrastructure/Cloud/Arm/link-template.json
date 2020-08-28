@@ -9,11 +9,10 @@
         "description": "Name of the web app"
       }
     },
-    "ServicePrincipalObjectId": {
+    "dbAdminAadObjectId": {
       "type": "string",
-      "defaultValue": "starter",
       "metadata": {
-        "description": "Azure AD Object Id of the Service Principal used for deployment"
+        "description": "Azure Active directory object id of the AD admin user"
       }
     },
     "githubRepository": {
@@ -29,11 +28,7 @@
       },
       "defaultValue": "master"
     },
-    "deployAlmKeyVault": {
-      "type": "bool",
-      "defaultValue": true
-    },
-    "deployAppKeyVault": {
+    "deployKeyVault": {
       "type": "bool",
       "defaultValue": true
     },
@@ -65,15 +60,15 @@
       "type": "bool",
       "defaultValue": true
     },
-    "deployAlmKeyVaultPolicy": {
+    "deployKeyVaultPolicy": {
       "type": "bool",
       "defaultValue": true
     },
-    "deployAppKeyVaultPolicy": {
+    "deploykeyVaultPolicy": {
       "type": "bool",
       "defaultValue": true
     },
-    "deployAppKeyVaultSecrets": {
+    "deploykeyVaultSecrets": {
       "type": "bool",
       "defaultValue": true
     },
@@ -86,8 +81,7 @@
     }
   },
   "variables": {
-    "almKeyVaultName": "[concat('kvalm-',parameters('uniqueString'))]",
-    "appKeyVaultName": "[concat('kvapp-',parameters('uniqueString'))]",
+    "keyVaultName": "[concat('kv-',parameters('uniqueString'))]",
     "sqlServerName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-sql-server')]",
     "sqlDbName": "[concat(parameters('appName'),'-sql-db')]",
     "storageAccountName": "[concat('stor',parameters('uniqueString'))]",
@@ -103,8 +97,8 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "AlmKeyVault",
-      "condition": "[parameters('deployAlmKeyVault')]",
+      "name": "KeyVault",
+      "condition": "[parameters('deployKeyVault')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -112,23 +106,7 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('almKeyVaultName')]" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
-      "name": "AppKeyVault",
-      "condition": "[parameters('deployAppKeyVault')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'key-vault.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "keyVaultName": { "value": "[variables('appKeyVaultName')]" }
+          "keyVaultName": { "value": "[variables('keyVaultName')]" }
         }
       }
     },
@@ -162,13 +140,11 @@
         "parameters": {
           "sqlServerName": { "value": "[variables('sqlServerName')]" },
           "sqlDbName": { "value": "[variables('sqlDbName')]" },
-          "keyVaultName": { "value": "[variables('almKeyVaultName')]" },
-          "dbAdminPwdKvSecretName": {
-            "value": "AzureSqlDbAdminPassword"
+          "dbAdminAadObjectId": {
+            "value": "[parameters('dbAdminAadObjectId')]"
           }
         }
-      },
-      "dependsOn": ["AlmKeyVault"]
+      }
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -259,8 +235,8 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "AlmKeyVaultPolicy",
-      "condition": "[parameters('deployAlmKeyVaultPolicy')]",
+      "name": "keyVaultPolicy",
+      "condition": "[parameters('deploykeyVaultPolicy')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -268,39 +244,19 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('almKeyVaultName')]" },
-          "objectId": {
-            "value": "[parameters('ServicePrincipalObjectId')]"
-          }
-        }
-      },
-      "dependsOn": ["AlmKeyVault"]
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
-      "name": "AppKeyVaultPolicy",
-      "condition": "[parameters('deployAppKeyVaultPolicy')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'key-vault-policy.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "keyVaultName": { "value": "[variables('appKeyVaultName')]" },
+          "keyVaultName": { "value": "[variables('keyVaultName')]" },
           "objectId": {
             "value": "[reference(resourceId('Microsoft.Web/sites', variables('webAppName')),'2019-08-01', 'Full').identity.principalId]"
           }
         }
       },
-      "dependsOn": ["WebApp", "AppKeyVault"]
+      "dependsOn": ["WebApp", "keyVault"]
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "AppKeyVaultSecrets",
-      "condition": "[parameters('deployAppKeyVaultSecrets')]",
+      "name": "keyVaultSecrets",
+      "condition": "[parameters('deploykeyVaultSecrets')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -309,7 +265,7 @@
         },
         "parameters": {
           "keyVaultName": {
-            "value": "[variables('appKeyVaultName')]"
+            "value": "[variables('keyVaultName')]"
           },
           "appInsightsName": {
             "value": "[variables('appInsightsName')]"
@@ -338,7 +294,7 @@
         }
       },
       "dependsOn": [
-        "AppKeyVault",
+        "KeyVault",
         "AppInsights",
         "StorageAccount",
         "RedisCache",
@@ -377,15 +333,10 @@
       "condition": "[parameters('deployAppInsights')]",
       "value": "[variables('appInsightsName')]"
     },
-    "almKeyVaultName": {
+    "keyVaultName": {
       "type": "string",
-      "condition": "[parameters('deployAlmKeyVault')]",
-      "value": "[variables('almKeyVaultName')]"
-    },
-    "appKeyVaultName": {
-      "type": "string",
-      "condition": "[parameters('deployAppKeyVault')]",
-      "value": "[variables('appKeyVaultName')]"
+      "condition": "[parameters('deploykeyVault')]",
+      "value": "[variables('keyVaultName')]"
     },
     "webAppName": {
       "type": "string",
