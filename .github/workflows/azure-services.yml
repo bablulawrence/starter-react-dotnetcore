@@ -60,24 +60,4 @@ jobs:
           ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
       - name: Run SQL script to add MSI user to database
-        run: SQLCMD.exe -S ${{ needs.deployArmJob.outputs.sqlServerName }} -d ${{ needs.deployArmJob.outputs.sqlDbName }} -U $${{github.event.inputs.dbAdminUserName}} -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }} -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
-        # with:
-        #   server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net
-        #   connection-string:
-        #     Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433;
-        #     Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};
-        #     User ID=$${{github.event.inputs.dbAdminUserName}};Password=${{ secrets.AZURE_DB_ADMIN_PASSWORD }};
-        #     Persist Security Info=False;MultipleActiveResultSets=False;
-        #     Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
-        #   sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
-      # - name: Run SQL script to add MSI user to database
-      #   uses: azure/sql-action@v1
-      #   with:
-      #     server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net
-      #     connection-string:
-      #       Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433;
-      #       Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};
-      #       User ID=$${{github.event.inputs.dbAdminUserName}};Password=${{ secrets.AZURE_DB_ADMIN_PASSWORD }};
-      #       Persist Security Info=False;MultipleActiveResultSets=False;
-      #       Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
-      #     sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
+        run: SQLCMD.exe -S ${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net -d ${{ needs.deployArmJob.outputs.sqlDbName }} -U $${{github.event.inputs.dbAdminUserName}} -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }} -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
