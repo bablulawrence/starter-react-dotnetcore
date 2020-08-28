@@ -9,16 +9,21 @@ on:
         description: "Azure subscription id"
       resourceGroupName:
         description: "Azure resource group name"
+      aadTenantId:
+        description: "Azure AD tenant id"
       dbAdminUserName:
         description: "User name of database admin"
 
 jobs:
-  deployArmJob:
+  deployArm:
     name: Deploy ARM templates
     outputs:
-      almKeyVaultName: ${{ steps.deployArm.outputs.almKeyVaultName }}
+      keyVaultName: ${{ steps.deployArm.outputs.keyVaultName }}
+      storageAccountName: ${{ steps.deployArm.outputs.storageAccountName }}
       sqlServerName: ${{ steps.deployArm.outputs.sqlServerName }}
       sqlDbName: ${{ steps.deployArm.outputs.sqlDbName }}
+      redisCacheName: ${{ steps.deployArm.outputs.redisCacheName }}
+      azureSearchName: ${{ steps.deployArm.outputs.azureSearchName }}
       webAppName: ${{ steps.deployArm.outputs.webAppName }}
     runs-on: ubuntu-latest
     steps:
@@ -42,8 +47,8 @@ jobs:
             dbAdminAadObjectId=${{ secrets.AZURE_DB_ADMIN_AAD_OBJECT_ID }}
             githubRepository=${{ github.repository }}
 
-  createDbMsiUser:
-    needs: deployArmJob
+  updateSettings:
+    needs: deployArm
     name: Add Web App MSI user to database
     runs-on: windows-latest
     steps:
@@ -57,11 +62,50 @@ jobs:
 
       - name: Replace web app name in SQL script for adding MSI user
         run: |
-          ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
+          ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArm.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
       - name: Run SQL script to add MSI user to database
-        run: SQLCMD -S ${{needs.deployArmJob.outputs.sqlServerName}}.database.windows.net
-          -d ${{needs.deployArmJob.outputs.sqlDbName}}
+        run:
+          SQLCMD -S ${{needs.deployArm.outputs.sqlServerName}}.database.windows.net
+          -d ${{needs.deployArm.outputs.sqlDbName}}
           -U ${{github.event.inputs.dbAdminUserName}}
           -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
           -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
+
+      - name: Update Web App App settings
+        id: appSettings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{needs.deployArm.outputs.webAppName}}
+          app-settings-json: '{
+            "AllowedHosts": "*",
+            "ApplicationInsights": {
+            "instrumentationKey": ""
+            },
+            "KeyVaultName": "${{needs.deployArm.outputs.keyVaultName}}",
+            "AzureAd": {
+            "Instance": "https://login.microsoftonline.com/",
+            "ClientId": "https://api.starter-app-bl.azurewebsites.net",
+            "TenantId": "${{github.event.inputs.aadTenantId}}"
+            },
+            "RedisCache": {
+            "clientName": "${{needs.deployArm.outputs.redisCacheName}}.redis.cache.windows.net:6380",
+            "key": ""
+            },
+            "AzureSearch": {
+            "accountName": "${{needs.deployArm.outputs.azureSearchName}}",
+            "adminKey": ""
+            },
+            "AzureStorageAccount": {
+            "accountName": "${{needs.deployArm.outputs.storageAccountName}}",
+            "accountKey": ""
+            },
+            "AzureEnvironment": {
+            "Name": "dev"
+            }
+            }'
+          connection-strings-json: '{
+            "DefaultConnection": "Server=tcp:${{needs.deployArm.outputs.sqlServerName}}.database.windows.net,1433;Initial Catalog=${{needs.deployArm.outputs.sqlDbName}};Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;"
+            }'
+          general-settings-json: '{"alwaysOn": "false", "webSocketsEnabled": "true"}'
+      - run: echo "Web app url - ${{ steps.appSettings.outputs.webapp-url }}"
