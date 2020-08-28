@@ -60,4 +60,4 @@ jobs:
           ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArmJob.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
       - name: Run SQL script to add MSI user to database
-        run: SQLCMD.exe -S ${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net -d ${{ needs.deployArmJob.outputs.sqlDbName }} -U $${{github.event.inputs.dbAdminUserName}} -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }} -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
+        run: SQLCMD.exe -S ${{needs.deployArmJob.outputs.sqlServerName}}.database.windows.net -d ${{needs.deployArmJob.outputs.sqlDbName}} -U ${{github.event.inputs.dbAdminUserName}} -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }} -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
