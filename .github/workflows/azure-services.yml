@@ -68,5 +68,10 @@ jobs:
         uses: azure/sql-action@v1
         with:
           server-name: ${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net
-          connection-string: "Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433;Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};User ID=sqlAdmin;Password=${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }};Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+          connection-string:
+            Server=tcp:${{ needs.deployArmJob.outputs.sqlServerName }}.database.windows.net,1433;
+            Initial Catalog=${{ needs.deployArmJob.outputs.sqlDbName }};
+            User ID=sqlAdmin;Password=${{ steps.getDbAdminPassword.outputs.AzureSqlDbAdminPassword }};
+            Persist Security Info=False;MultipleActiveResultSets=False;
+            Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
           sql-file: "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql"
