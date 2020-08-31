@@ -14,12 +14,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
       - name: Github checkout
         uses: actions/checkout@v2
+
+      #Update environment variable values
+      - name: Update Azure AD tenant id in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AadTenantId__"
+          replace: ${{ secrets.AZURE_AD_TENANT_ID }}
+          include: ".env"
+      - name: Update Azure AD client id the of the client app in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AadClentAppClientId__"
+          replace: ${{ secrets.AZURE_AD_CLIENT_APP_CLIENT_ID }}
+          include: ".env"
+      - name: Update Azure AD client id of the api app in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AadApiAppClientId__"
+          replace: ${{ secrets.AZURE_AD_API_APP_CLIENT_ID }}
+          include: ".env"
+      - name: Update storage account name in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AzureStrgAcctName__"
+          replace: ${{ secrets.AZURE_STRG_ACCT_NAME }}
+          include: ".env"
 
       #Setup, build and test app
       - name: Setup .NET Core
