@@ -104,4 +104,5 @@ jobs:
             }
             ]'
           general-settings-json: '{"alwaysOn": "false", "webSocketsEnabled": "true", "linuxFxVersion": "DOTNETCORE|3.1" }'
-      - run: echo "Web app url - ${{ steps.appSettings.outputs.webapp-url }}"
+      - name: Display web app url
+        run: echo "Web app url - ${{ steps.appSettings.outputs.webapp-url }}"
