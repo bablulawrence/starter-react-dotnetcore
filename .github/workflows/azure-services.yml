@@ -47,7 +47,7 @@ jobs:
 
   updateSettings:
     needs: deployArm
-    name: Add Web App MSI user to database
+    name: Add web app MSI user to database
     runs-on: windows-latest
     steps:
       - name: Login to Azure
@@ -70,7 +70,14 @@ jobs:
           -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
           -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
 
-      - name: Update Web App App settings
+      - name: Get application insights instrumentation key from key vault
+        id: getAppInsightsKey
+        uses: Azure/get-keyvault-secrets@v1.0
+        with:
+          keyvault: ${{needs.deployArm.outputs.keyVaultName}}
+          secrets: "ApplicationInsights--instrumentationKey"
+
+      - name: Update web app app settings
         id: appSettings
         uses: azure/appservice-settings@v1
         with:
@@ -79,6 +86,11 @@ jobs:
             { "name": "AzureAd__ClientId", "value": "${{secrets.AZURE_AD_API_APP_CLIENT_ID}}",  "slotSetting": false  },
             { "name": "AzureAd__TenantId", "value": "${{secrets.AZURE_AD_TENANT_ID}}",  "slotSetting": false  },
             { "name": "KeyVaultName", "value": "${{needs.deployArm.outputs.keyVaultName}}",  "slotSetting": false  },
+            {
+            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+            "value": "${{steps.getAppInsightsKey.outputs.ApplicationInsights--instrumentationKey}}",
+            "slotSetting": false
+            },
             {
             "name": "RedisCache__clientName",
             "value": "${{needs.deployArm.outputs.redisCacheName}}.redis.cache.windows.net:6380",
@@ -108,7 +120,7 @@ jobs:
             "use32BitWorkerProcess": false,
             "remoteDebuggingEnabled": false,
             "alwaysOn": "false",
-            "webSocketsEnabled": "false"             
+            "webSocketsEnabled": "false"
             }'
       - name: Display web app url
         run: echo "Web app url - ${{ steps.appSettings.outputs.webapp-url }}"
