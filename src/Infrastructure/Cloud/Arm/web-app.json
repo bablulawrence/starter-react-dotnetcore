@@ -25,11 +25,12 @@
         "description": "The SKU of App Service Plan "
       }
     },
-    "linuxFxVersion": {
+    "language": {
       "type": "string",
-      "defaultValue": "php|7.0",
+      "defaultValue": ".net",
+      "allowedValues": [".net", "php", "node", "html"],
       "metadata": {
-        "description": "The Runtime stack of current web app"
+        "description": "The language stack of the app."
       }
     },
     "location": {
@@ -42,7 +43,26 @@
   },
   "variables": {
     "webAppPortalName": "[parameters('webAppName')]",
-    "appServicePlanName": "[parameters('appServicePlanName')]"
+    "appServicePlanName": "[parameters('appServicePlanName')]",
+    "configReference": {
+      ".net": {
+        "comments": ".Net app. No additional configuration needed."
+      },
+      "html": {
+        "comments": "HTML app. No additional configuration needed."
+      },
+      "php": {
+        "phpVersion": "7.4"
+      },
+      "node": {
+        "appSettings": [
+          {
+            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+            "value": "12.15.0"
+          }
+        ]
+      }
+    }
   },
   "resources": [
     {
@@ -52,10 +72,6 @@
       "location": "[parameters('location')]",
       "sku": {
         "name": "[parameters('sku')]"
-      },
-      "kind": "linux",
-      "properties": {
-        "reserved": true
       }
     },
     {
@@ -72,9 +88,7 @@
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
-        "siteConfig": {
-          "linuxFxVersion": "[parameters('linuxFxVersion')]"
-        }
+        "siteConfig": "[variables('configReference')[parameters('language')]]"
       }
     }
   ]
