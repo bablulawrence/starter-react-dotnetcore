@@ -15,6 +15,12 @@
         "description": "Azure Active directory object id of the AD admin user"
       }
     },
+    "almSpAadObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "Object id of the Service Principal used for deploying app"
+      }
+    },
     "githubRepository": {
       "type": "string",
       "metadata": {
@@ -60,15 +66,15 @@
       "type": "bool",
       "defaultValue": true
     },
-    "deployKeyVaultPolicy": {
+    "deployKeyVaultPolicyDbAmin": {
       "type": "bool",
       "defaultValue": true
     },
-    "deploykeyVaultPolicy": {
+    "deployKeyVaultPolicyAlmSp": {
       "type": "bool",
       "defaultValue": true
     },
-    "deploykeyVaultSecrets": {
+    "deployKeyVaultSecrets": {
       "type": "bool",
       "defaultValue": true
     },
@@ -235,8 +241,28 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "keyVaultPolicy",
-      "condition": "[parameters('deploykeyVaultPolicy')]",
+      "name": "KeyVaultPolicyAlmSp",
+      "condition": "[parameters('deployKeyVaultPolicyAlmSp')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateBaseUrl'), 'key-vault-policy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": { "value": "[variables('keyVaultName')]" },
+          "objectId": {
+            "value": "[parameters('almSpAadObjectId')]"
+          }
+        }
+      },
+      "dependsOn": ["KeyVault"]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "KeyVaultPolicyDbAdmin",
+      "condition": "[parameters('deployKeyVaultPolicyDbAmin')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -250,13 +276,13 @@
           }
         }
       },
-      "dependsOn": ["WebApp", "keyVault"]
+      "dependsOn": ["WebApp", "KeyVault"]
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "keyVaultSecrets",
-      "condition": "[parameters('deploykeyVaultSecrets')]",
+      "name": "KeyVaultSecrets",
+      "condition": "[parameters('deployKeyVaultSecrets')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -335,7 +361,7 @@
     },
     "keyVaultName": {
       "type": "string",
-      "condition": "[parameters('deploykeyVault')]",
+      "condition": "[parameters('deployKeyVault')]",
       "value": "[variables('keyVaultName')]"
     },
     "webAppName": {

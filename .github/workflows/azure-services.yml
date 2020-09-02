@@ -43,11 +43,12 @@ jobs:
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
           parameters: appName=${{ github.event.inputs.appName }}
             dbAdminAadObjectId=${{ secrets.AZURE_DB_ADMIN_AAD_OBJECT_ID }}
+            almSpAadObjectId=${{ secrets.AZURE_SERVICE_PRINCIPAL_OBJECT_ID }}
             githubRepository=${{ github.repository }}
 
   updateSettings:
     needs: deployArm
-    name: Add web app MSI user to database
+    name: Update database and web app settings
     runs-on: windows-latest
     steps:
       - name: Login to Azure
