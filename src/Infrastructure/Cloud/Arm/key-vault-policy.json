@@ -8,10 +8,16 @@
         "description": "Specifies the name of the key vault."
       }
     },
-    "objectId": {
+    "spObjectId": {
       "type": "string",
       "metadata": {
-        "description": "Specifies the Azure Active Directory objectId that should be given permissions to the key vault."
+        "description": "Specifies the Azure AD objectId of the service principal that should be given permissions to the key vault."
+      }
+    },
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the name of the web app that should be given permissions to the key vault."
       }
     },
     "tenantId": {
@@ -38,7 +44,23 @@
         "accessPolicies": [
           {
             "tenantId": "[parameters('tenantId')]",
-            "objectId": "[parameters('objectId')]",
+            "objectId": "[parameters('spObjectId')]",
+            "permissions": {
+              "secrets": "[parameters('secretsPermissions')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('keyVaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[parameters('tenantId')]",
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('webAppName')),'2019-08-01', 'Full').identity.principalId]",
             "permissions": {
               "secrets": "[parameters('secretsPermissions')]"
             }
