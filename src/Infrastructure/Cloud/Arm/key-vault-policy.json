@@ -38,7 +38,7 @@
   "resources": [
     {
       "type": "Microsoft.KeyVault/vaults/accessPolicies",
-      "name": "[concat(parameters('keyVaultName'), '/add')]",
+      "name": "[concat(parameters('keyVaultName'), '/ServicePrincipal')]",
       "apiVersion": "2019-09-01",
       "properties": {
         "accessPolicies": [
@@ -54,13 +54,13 @@
     },
     {
       "type": "Microsoft.KeyVault/vaults/accessPolicies",
-      "name": "[concat(parameters('keyVaultName'), '/add')]",
+      "name": "[concat(parameters('keyVaultName'), '/WebApp')]",
       "apiVersion": "2019-09-01",
       "properties": {
         "accessPolicies": [
           {
             "tenantId": "[parameters('tenantId')]",
-            "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('webAppName')),'2019-08-01', 'Full').identity.principalId]",
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('webAppName')),'2019-08-01', 'Full').identity.principalId]",
             "permissions": {
               "secrets": "[parameters('secretsPermissions')]"
             }
