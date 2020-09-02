@@ -66,7 +66,7 @@
       "type": "bool",
       "defaultValue": true
     },
-    "deployKeyVaultPolicyDbAmin": {
+    "deployKeyVaultPolicyWebApp": {
       "type": "bool",
       "defaultValue": true
     },
@@ -100,22 +100,6 @@
     "templateBaseUrl": "[concat('https://raw.githubusercontent.com/',parameters('githubRepository'),'/',parameters('templateBranch'),'/src/Infrastructure/Cloud/Arm/')]"
   },
   "resources": [
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
-      "name": "KeyVault",
-      "condition": "[parameters('deployKeyVault')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'key-vault.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "keyVaultName": { "value": "[variables('keyVaultName')]" }
-        }
-      }
-    },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
@@ -241,6 +225,22 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
+      "name": "KeyVault",
+      "condition": "[parameters('deployKeyVault')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateBaseUrl'), 'key-vault.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": { "value": "[variables('keyVaultName')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
       "name": "KeyVaultPolicyAlmSp",
       "condition": "[parameters('deployKeyVaultPolicyAlmSp')]",
       "properties": {
@@ -261,18 +261,18 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "KeyVaultPolicyDbAdmin",
-      "condition": "[parameters('deployKeyVaultPolicyDbAmin')]",
+      "name": "KeyVaultPolicyWebApp",
+      "condition": "[parameters('deployKeyVaultPolicyWebApp')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'key-vault-policy.json')]",
+          "uri": "[concat(variables('templateBaseUrl'), 'key-vault-policy-web-app.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "keyVaultName": { "value": "[variables('keyVaultName')]" },
-          "objectId": {
-            "value": "[reference(resourceId('Microsoft.Web/sites', variables('webAppName')),'2019-08-01', 'Full').identity.principalId]"
+          "webAppName": {
+            "value": "[variables('webAppName')]"
           }
         }
       },
