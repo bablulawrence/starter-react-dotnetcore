@@ -27,8 +27,8 @@
     },
     "language": {
       "type": "string",
-      "defaultValue": ".net",
-      "allowedValues": [".net", "php", "node", "html"],
+      "defaultValue": ".netcore",
+      "allowedValues": [".netcore", ".net", "php", "node", "html"],
       "metadata": {
         "description": "The language stack of the app."
       }
@@ -45,6 +45,15 @@
     "webAppPortalName": "[parameters('webAppName')]",
     "appServicePlanName": "[parameters('appServicePlanName')]",
     "configReference": {
+      ".netcore": {
+        "appSettings": [],
+        "metadata": [
+          {
+            "name": "CURRENT_STACK",
+            "value": "dotnetcore"
+          }
+        ]
+      },
       ".net": {
         "comments": ".Net app. No additional configuration needed."
       },
