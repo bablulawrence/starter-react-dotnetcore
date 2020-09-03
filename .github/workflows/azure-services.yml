@@ -5,12 +5,8 @@ on:
     inputs:
       appName:
         description: "App name"
-      subscriptionId:
-        description: "Azure subscription id"
       resourceGroupName:
         description: "Azure resource group name"
-      dbAdminUserName:
-        description: "User name of database admin"
 
 jobs:
   deployArm:
@@ -38,7 +34,7 @@ jobs:
         id: deployArm
         with:
           scope: resourcegroup
-          subscriptionId: ${{ github.event.inputs.subscriptionId }}
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
           parameters: appName=${{ github.event.inputs.appName }}
@@ -65,53 +61,53 @@ jobs:
 
       - name: Run SQL script to add MSI user to database
         run:
-          SQLCMD -S ${{needs.deployArm.outputs.sqlServerName}}.database.windows.net
-          -d ${{needs.deployArm.outputs.sqlDbName}}
-          -U ${{github.event.inputs.dbAdminUserName}}
-          -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
+          SQLCMD -S ${{ needs.deployArm.outputs.sqlServerName }}.database.windows.net
+          -d ${{ needs.deployArm.outputs.sqlDbName }}
+          -U ${{ secrets.AZURE_DB_ADMIN_USER }}
+          -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
           -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
 
       - name: Get application insights instrumentation key from key vault
         id: getAppInsightsKey
         uses: Azure/get-keyvault-secrets@v1.0
         with:
-          keyvault: ${{needs.deployArm.outputs.keyVaultName}}
+          keyvault: ${{ needs.deployArm.outputs.keyVaultName }}
           secrets: "ApplicationInsights--instrumentationKey"
 
       - name: Update web app app settings
         id: appSettings
         uses: azure/appservice-settings@v1
         with:
-          app-name: ${{needs.deployArm.outputs.webAppName}}
+          app-name: ${{ needs.deployArm.outputs.webAppName }}
           app-settings-json: '[
-            { "name": "AzureAd__ClientId", "value": "${{secrets.AZURE_AD_API_APP_CLIENT_ID}}",  "slotSetting": false  },
-            { "name": "AzureAd__TenantId", "value": "${{secrets.AZURE_AD_TENANT_ID}}",  "slotSetting": false  },
+            { "name": "AzureAd__ClientId", "value": "${{ secrets.AZURE_AD_API_APP_CLIENT_ID }}",  "slotSetting": false  },
+            { "name": "AzureAd__TenantId", "value": "${{ secrets.AZURE_AD_TENANT_ID }}",  "slotSetting": false  },
             { "name": "KeyVaultName", "value": "${{needs.deployArm.outputs.keyVaultName}}",  "slotSetting": false  },
             {
             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-            "value": "${{steps.getAppInsightsKey.outputs.ApplicationInsights--instrumentationKey}}",
+            "value": "${{ steps.getAppInsightsKey.outputs.ApplicationInsights--instrumentationKey }}",
             "slotSetting": false
             },
             {
             "name": "RedisCache__clientName",
-            "value": "${{needs.deployArm.outputs.redisCacheName}}.redis.cache.windows.net:6380",
+            "value": "${{ needs.deployArm.outputs.redisCacheName }}.redis.cache.windows.net:6380",
             "slotSetting": false
             },
             {
             "name": "AzureSearch__accountName",
-            "value": "${{needs.deployArm.outputs.azureSearchName}}",
+            "value": "${{ needs.deployArm.outputs.azureSearchName}}",
             "slotSetting": false
             },
             {
             "name": "AzureStorageAccount__accountName",
-            "value": "${{needs.deployArm.outputs.storageAccountName}}",
+            "value": "${{ needs.deployArm.outputs.storageAccountName }}",
             "slotSetting": false
             }
             ]'
           connection-strings-json: '[
             {
             "name" : "DefaultConnection",
-            "value": "Server=tcp:${{needs.deployArm.outputs.sqlServerName}}.database.windows.net,1433;Initial Catalog=${{needs.deployArm.outputs.sqlDbName}};Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;",
+            "value": "Server=tcp:${{ needs.deployArm.outputs.sqlServerName }}.database.windows.net,1433;Initial Catalog=${{ needs.deployArm.outputs.sqlDbName }};Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;",
             "type": "SQLServer",
             "slotSetting": false
             }
