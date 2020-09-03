@@ -1,0 +1,39 @@
+name: Deploy database migrations
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "/src/Infrastructure/Data/Migrations/**"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "/src/Infrastructure/Data/Migrations/**"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      - name: Github checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.301
+
+      - name: Generate database migration script
+        run: dotnet ef migrations script
+          --project "./src/Infrastructure/Infrastructure.csproj"
+          --output "./src/Infrastructure/bin/db-migrations.sql"
+
+      - name: Deploy migration script to database
+        run: SQLCMD -S ${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net
+          -d starter-sql-db
+          -U ${{ secrets.AZURE_DB_ADMIN_USER }}
+          -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
+          -i "./src/Infrastructure/bin/db-migrations.sql" -G
