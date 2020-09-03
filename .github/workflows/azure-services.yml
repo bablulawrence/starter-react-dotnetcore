@@ -55,7 +55,7 @@ jobs:
       - name: Github checkout
         uses: actions/checkout@v2
 
-      - name: Replace web app name in SQL script for adding MSI user
+      - name: Update web app name in SQL script for adding MSI user
         run: |
           ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ needs.deployArm.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
@@ -65,7 +65,7 @@ jobs:
           -d ${{ needs.deployArm.outputs.sqlDbName }}
           -U ${{ secrets.AZURE_DB_ADMIN_USER }}
           -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
-          -i ./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql -G
+          -i "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql" -G
 
       - name: Get application insights instrumentation key from key vault
         id: getAppInsightsKey
