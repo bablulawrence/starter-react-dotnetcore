@@ -24,7 +24,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.310
+          dotnet-version: 3.1.301
 
       - name: Install EF Core tools
         run: dotnet tool install --global dotnet-ef --version 3.1.3
