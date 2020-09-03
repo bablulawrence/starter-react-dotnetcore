@@ -18,6 +18,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Github checkout
         uses: actions/checkout@v2
 
