@@ -7,6 +7,9 @@
     },
     "appServicePlanName": {
       "value": "GEN-UNIQUE"
+    },
+    "appInsightsName": {
+      "value": "GEN-UNIQUE"
     }
   }
 }

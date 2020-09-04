@@ -18,6 +18,13 @@
       },
       "minLength": 2
     },
+    "appInsightsName": {
+      "type": "string",
+      "defaultValue": "starter-app-insights",
+      "metadata": {
+        "description": "Name of application insights"
+      }
+    },
     "sku": {
       "type": "string",
       "defaultValue": "B1",
@@ -43,35 +50,7 @@
   },
   "variables": {
     "webAppPortalName": "[parameters('webAppName')]",
-    "appServicePlanName": "[parameters('appServicePlanName')]",
-    "configReference": {
-      ".netcore": {
-        "appSettings": [],
-        "metadata": [
-          {
-            "name": "CURRENT_STACK",
-            "value": "dotnetcore"
-          }
-        ]
-      },
-      ".net": {
-        "comments": ".Net app. No additional configuration needed."
-      },
-      "html": {
-        "comments": "HTML app. No additional configuration needed."
-      },
-      "php": {
-        "phpVersion": "7.4"
-      },
-      "node": {
-        "appSettings": [
-          {
-            "name": "WEBSITE_NODE_DEFAULT_VERSION",
-            "value": "12.15.0"
-          }
-        ]
-      }
-    }
+    "appServicePlanName": "[parameters('appServicePlanName')]"
   },
   "resources": [
     {
@@ -98,7 +77,71 @@
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
-        "siteConfig": "[variables('configReference')[parameters('language')]]"
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2014-08-01').InstrumentationKey]",
+              "slotSetting": true
+            },
+            {
+              "name": "APPINSIGHTS_PROFILERFEATURE_VERSION",
+              "value": "1.0.0",
+              "slotSetting": true
+            },
+            {
+              "name": "APPINSIGHTS_SNAPSHOTFEATURE_VERSION",
+              "value": "1.0.0",
+              "slotSetting": true
+            },
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~2",
+              "slotSetting": true
+            },
+            {
+              "name": "DiagnosticServices_EXTENSION_VERSION",
+              "value": "~3",
+              "slotSetting": true
+            },
+            {
+              "name": "InstrumentationEngine_EXTENSION_VERSION",
+              "value": "disabled",
+              "slotSetting": true
+            },
+            {
+              "name": "SnapshotDebugger_EXTENSION_VERSION",
+              "value": "disabled",
+              "slotSetting": true
+            },
+            {
+              "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+              "value": "true",
+              "slotSetting": false
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_BaseExtensions",
+              "value": "disabled",
+              "slotSetting": true
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_Mode",
+              "value": "recommended",
+              "slotSetting": true
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_PreemptSdk",
+              "value": "1",
+              "slotSetting": true
+            }
+          ],
+          "metadata": [
+            {
+              "name": "CURRENT_STACK",
+              "value": "dotnetcore"
+            }
+          ]
+        }
       }
     }
   ]
