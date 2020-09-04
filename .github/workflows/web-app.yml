@@ -14,7 +14,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish:
+  deployWebApp:
+    name: Deploy web app to Azure App Service
     runs-on: ubuntu-latest
 
     steps:

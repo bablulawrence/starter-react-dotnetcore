@@ -120,6 +120,11 @@
               "slotSetting": false
             },
             {
+              "name": "WEBSITE_WEBDEPLOY_USE_SCM",
+              "value": "true",
+              "slotSetting": false
+            },
+            {
               "name": "XDT_MicrosoftApplicationInsights_BaseExtensions",
               "value": "disabled",
               "slotSetting": true
