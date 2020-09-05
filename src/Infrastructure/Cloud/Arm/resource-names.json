@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "type": "string",
+      "defaultValue": "starter",
+      "metadata": {
+        "description": "Name of the web app"
+      }
+    },
+    "uniqueString": {
+      "type": "string",
+      "metadata": {
+        "description": "String for uniquely identifying resources"
+      },
+      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appName'))]"
+    }
+  },
+  "variables": {
+    "keyVaultName": "[concat('kv-',parameters('uniqueString'))]",
+    "sqlServerName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-sql-server')]",
+    "sqlDbName": "[concat(parameters('appName'),'-sql-db')]",
+    "storageAccountName": "[concat('stor',parameters('uniqueString'))]",
+    "redisCacheName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-redis-cache')]",
+    "azureSearchName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-azure-search')]",
+    "workspaceName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-workspace')]",
+    "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
+    "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
+    "webAppName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-web-app')]"
+  },
+  "resources": [],
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "value": "[variables('sqlServerName')]"
+    },
+    "sqlDbName": {
+      "type": "string",
+      "value": "[variables('sqlDbName')]"
+    },
+    "redisCacheName": {
+      "type": "string",
+      "value": "[variables('redisCacheName')]"
+    },
+    "azureSearchName": {
+      "type": "string",
+      "value": "[variables('azureSearchName')]"
+    },
+    "workspaceName": {
+      "type": "string",
+      "value": "[variables('azureSearchName')]"
+    },
+    "appInsightsName": {
+      "type": "string",
+      "value": "[variables('appInsightsName')]"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "value": "[variables('keyVaultName')]"
+    },
+    "appServicePlanName": {
+      "type": "string",
+      "value": "[variables('appServicePlanName')]"
+    },
+    "webAppName": {
+      "type": "string",
+      "value": "[variables('webAppName')]"
+    }
+  }
+}
