@@ -87,19 +87,25 @@
     }
   },
   "variables": {
-    "keyVaultName": "[concat('kv-',parameters('uniqueString'))]",
-    "sqlServerName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-sql-server')]",
-    "sqlDbName": "[concat(parameters('appName'),'-sql-db')]",
-    "storageAccountName": "[concat('stor',parameters('uniqueString'))]",
-    "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
-    "redisCacheName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-redis-cache')]",
-    "azureSearchName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-azure-search')]",
-    "workspaceName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-workspace')]",
-    "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
-    "webAppName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-web-app')]",
     "templateBaseUrl": "[concat('https://raw.githubusercontent.com/',parameters('githubRepository'),'/',parameters('templateBranch'),'/src/Infrastructure/Cloud/Arm/')]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "ResourceNames",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateBaseUrl'), 'resource-names.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appName": { "value": "[parameters('appName')]" },
+          "uniqueString": { "value": "[parameters('uniqueString')]" }
+        }
+      }
+    },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
@@ -112,9 +118,12 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "storageAccountName": { "value": "[variables('storageAccountName')]" }
+          "storageAccountName": {
+            "value": "[reference('ResourceNames').outputs.storageAccountName.value]"
+          }
         }
-      }
+      },
+      "dependsOn": ["ResourceNames"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -128,13 +137,18 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "sqlServerName": { "value": "[variables('sqlServerName')]" },
-          "sqlDbName": { "value": "[variables('sqlDbName')]" },
+          "sqlServerName": {
+            "value": "[reference('ResourceNames').outputs.sqlServerName.value]"
+          },
+          "sqlDbName": {
+            "value": "[reference('ResourceNames').outputs.sqlDbName.value]"
+          },
           "dbAdminAadObjectId": {
             "value": "[parameters('dbAdminAadObjectId')]"
           }
         }
-      }
+      },
+      "dependsOn": ["ResourceNames"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -148,12 +162,15 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "redisCacheName": { "value": "[variables('redisCacheName')]" },
+          "redisCacheName": {
+            "value": "[reference('ResourceNames').outputs.redisCacheName.value]"
+          },
           "diagnosticsStorageAccountName": {
-            "value": "[variables('storageAccountName')]"
+            "value": "[reference('ResourceNames').outputs.storageAccountName.value]"
           }
         }
-      }
+      },
+      "dependsOn": ["ResourceNames"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -167,9 +184,12 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "azureSearchName": { "value": "[variables('azureSearchName')]" }
+          "azureSearchName": {
+            "value": "[reference('ResourceNames').outputs.azureSearchName.value]"
+          }
         }
-      }
+      },
+      "dependsOn": ["ResourceNames"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -183,9 +203,12 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "workspaceName": { "value": "[variables('workspaceName')]" }
+          "workspaceName": {
+            "value": "[reference('ResourceNames').outputs.workspaceName.value]"
+          }
         }
-      }
+      },
+      "dependsOn": ["ResourceNames"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -199,11 +222,15 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "appInsightsName": { "value": "[variables('appInsightsName')]" },
-          "workspaceName": { "value": "[variables('workspaceName')]" }
+          "appInsightsName": {
+            "value": "[reference('ResourceNames').outputs.appInsightsName.value]"
+          },
+          "workspaceName": {
+            "value": "[reference('ResourceNames').outputs.workspaceName.value]"
+          }
         }
       },
-      "dependsOn": ["Workspace"]
+      "dependsOn": ["ResourceNames", "Workspace"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -217,14 +244,18 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "webAppName": { "value": "[variables('webAppName')]" },
-          "appServicePlanName": {
-            "value": "[variables('appServicePlanName')]"
+          "webAppName": {
+            "value": "[reference('ResourceNames').outputs.webAppName.value]"
           },
-          "appInsightsName": { "value": "[variables('appInsightsName')]" }
+          "appServicePlanName": {
+            "value": "[reference('ResourceNames').outputs.appServicePlanName.value]"
+          },
+          "appInsightsName": {
+            "value": "[reference('ResourceNames').outputs.appInsightsName.value]"
+          }
         }
       },
-      "dependsOn": ["AppInsights"]
+      "dependsOn": ["ResourceNames", "AppInsights"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -238,9 +269,12 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('keyVaultName')]" }
+          "keyVaultName": {
+            "value": "[reference('ResourceNames').outputs.keyVaultName.value]"
+          }
         }
-      }
+      },
+      "dependsOn": ["ResourceNames"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -254,13 +288,15 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('keyVaultName')]" },
+          "keyVaultName": {
+            "value": "[reference('ResourceNames').outputs.keyVaultName.value]"
+          },
           "objectId": {
             "value": "[parameters('almSpAadObjectId')]"
           }
         }
       },
-      "dependsOn": ["KeyVault"]
+      "dependsOn": ["ResourceNames", "KeyVault"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -274,13 +310,15 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "keyVaultName": { "value": "[variables('keyVaultName')]" },
+          "keyVaultName": {
+            "value": "[reference('ResourceNames').outputs.keyVaultName.value]"
+          },
           "webAppName": {
-            "value": "[variables('webAppName')]"
+            "value": "[reference('ResourceNames').outputs.webAppName.value]"
           }
         }
       },
-      "dependsOn": ["WebApp", "KeyVault"]
+      "dependsOn": ["ResourceNames", "WebApp", "KeyVault"]
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -295,28 +333,28 @@
         },
         "parameters": {
           "keyVaultName": {
-            "value": "[variables('keyVaultName')]"
+            "value": "[reference('ResourceNames').outputs.keyVaultName.value]"
           },
           "appInsightsName": {
-            "value": "[variables('appInsightsName')]"
+            "value": "[reference('ResourceNames').outputs.appInsightsName.value]"
           },
           "appInsightsSecretName": {
             "value": "ApplicationInsights--instrumentationKey"
           },
           "storageAccountName": {
-            "value": "[variables('storageAccountName')]"
+            "value": "[reference('ResourceNames').outputs.storageAccountName.value]"
           },
           "storageAccountSecretName": {
             "value": "AzureStorageAccount--accountKey"
           },
           "redisCacheName": {
-            "value": "[variables('redisCacheName')]"
+            "value": "[reference('ResourceNames').outputs.redisCacheName.value]"
           },
           "redisCacheSecretName": {
             "value": "RedisCache--key"
           },
           "azureSearchName": {
-            "value": "[variables('azureSearchName')]"
+            "value": "[reference('ResourceNames').outputs.azureSearchName.value]"
           },
           "azureSearchSecretName": {
             "value": "AzureSearch--adminKey"
@@ -324,6 +362,7 @@
         }
       },
       "dependsOn": [
+        "ResourceNames",
         "KeyVault",
         "AppInsights",
         "StorageAccount",
@@ -336,42 +375,42 @@
     "storageAccountName": {
       "type": "string",
       "condition": "[parameters('deployStorageAccount')]",
-      "value": "[variables('storageAccountName')]"
+      "value": "[reference('ResourceNames').outputs.storageAccountName.value]"
     },
     "sqlServerName": {
       "type": "string",
       "condition": "[parameters('deploySqlDatabase')]",
-      "value": "[variables('sqlServerName')]"
+      "value": "[reference('ResourceNames').outputs.sqlServerName.value]"
     },
     "sqlDbName": {
       "type": "string",
       "condition": "[parameters('deploySqlDatabase')]",
-      "value": "[variables('sqlDbName')]"
+      "value": "[reference('ResourceNames').outputs.sqlDbName.value]"
     },
     "redisCacheName": {
       "type": "string",
       "condition": "[parameters('deployRedisCache')]",
-      "value": "[variables('redisCacheName')]"
+      "value": "[reference('ResourceNames').outputs.redisCacheName.value]"
     },
     "azureSearchName": {
       "type": "string",
       "condition": "[parameters('deployAzureSearch')]",
-      "value": "[variables('azureSearchName')]"
+      "value": "[reference('ResourceNames').outputs.azureSearchName.value]"
     },
-    "applicationInsightsName": {
+    "appInsightsName": {
       "type": "string",
       "condition": "[parameters('deployAppInsights')]",
-      "value": "[variables('appInsightsName')]"
+      "value": "[reference('ResourceNames').outputs.appInsightsName.value]"
     },
     "keyVaultName": {
       "type": "string",
       "condition": "[parameters('deployKeyVault')]",
-      "value": "[variables('keyVaultName')]"
+      "value": "[reference('ResourceNames').outputs.keyVaultName.value]"
     },
     "webAppName": {
       "type": "string",
       "condition": "[parameters('deployWebApp')]",
-      "value": "[variables('webAppName')]"
+      "value": "[reference('ResourceNames').outputs.webAppName.value]"
     }
   }
 }
