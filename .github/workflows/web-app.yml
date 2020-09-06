@@ -27,7 +27,17 @@ jobs:
       - name: Github checkout
         uses: actions/checkout@v2
 
-      #Update environment variable values
+      - name: Get Azure resource names
+        id: resourceNames
+        uses: whiteducksoftware/azure-arm-action-js@v4
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
+          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+
+      #Update environment variable values in .env file
       - name: Update Azure AD tenant id in the environment file
         uses: jacobtomlinson/gha-find-replace@master
         with:
@@ -50,7 +60,7 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "__AzureStrgAcctName__"
-          replace: ${{ secrets.AZURE_STRG_ACCT_NAME }}
+          replace: ${{ steps.resourceNames.outputs.storageAccountName }}
           include: ".env"
 
       #Setup, build and test app
@@ -73,4 +83,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           package: "./reactdotnet"
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME}}
+          app-name: ${{ steps.resourceNames.outputs.webAppName}}

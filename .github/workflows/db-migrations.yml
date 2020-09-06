@@ -27,6 +27,16 @@ jobs:
       - name: Github checkout
         uses: actions/checkout@v2
 
+      - name: Get Azure resource names
+        id: resourceNames
+        uses: whiteducksoftware/azure-arm-action-js@v4
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
+          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -41,7 +51,8 @@ jobs:
           --output "./src/Infrastructure/bin/db-migrations.sql"
 
       - name: Run migration script on Azure SQL Database
-        run: SQLCMD -S ${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net
+        run:
+          SQLCMD -S ${{ steps.resourceNames.outputs.sqlServerName }}.database.windows.net
           -d starter-sql-db
           -U ${{ secrets.AZURE_DB_ADMIN_USER }}
           -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}

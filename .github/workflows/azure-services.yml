@@ -2,11 +2,6 @@ name: Provision azure resources
 
 on:
   workflow_dispatch:
-    inputs:
-      appName:
-        description: "App name"
-      resourceGroupName:
-        description: "Azure resource group name"
 
 jobs:
   deployArm:
@@ -35,9 +30,9 @@ jobs:
         with:
           scope: resourcegroup
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
-          parameters: appName=${{ github.event.inputs.appName }}
+          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
             dbAdminAadObjectId=${{ secrets.AZURE_DB_ADMIN_AAD_OBJECT_ID }}
             almSpAadObjectId=${{ secrets.AZURE_SERVICE_PRINCIPAL_OBJECT_ID }}
             githubRepository=${{ github.repository }}
