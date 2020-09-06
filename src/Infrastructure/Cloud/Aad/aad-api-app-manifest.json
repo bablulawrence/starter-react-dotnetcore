@@ -1,0 +1,22 @@
+{
+  "appRoles": [
+    {
+      "allowedMemberTypes": ["User", "Application"],
+      "description": "Can manage items",
+      "displayName": "ItemManager",
+      "isEnabled": true,
+      "value": "ItemManager"
+    }
+  ],
+  "requiredResourceAccess": [
+    {
+      "resourceAppId": "00000002-0000-0000-c000-000000000000",
+      "resourceAccess": [
+        {
+          "id": "a42657d6-7f20-40e3-b6f0-cee03008a62a",
+          "type": "Scope"
+        }
+      ]
+    }
+  ]
+}
