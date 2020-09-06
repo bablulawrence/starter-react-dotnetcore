@@ -1,0 +1,59 @@
+name: Deploy database migrations
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "/src/Infrastructure/Data/Migrations/**"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "/src/Infrastructure/Data/Migrations/**"
+  workflow_dispatch:
+
+jobs:
+  deployDbMigration:
+    name: Deploy database migrations to Azure SQL Database
+    runs-on: windows-latest
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Github checkout
+        uses: actions/checkout@v2
+
+      - name: Get Azure resource names
+        id: resourceNames
+        uses: whiteducksoftware/azure-arm-action-js@v4
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
+          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.301
+
+      - name: Install EF Core tools
+        run: dotnet tool install --global dotnet-ef --version 3.1.3
+
+      - name: Generate database migration script
+        run: dotnet ef migrations script --idempotent
+          --project "./src/Infrastructure/Infrastructure.csproj"
+          --output "./src/Infrastructure/bin/db-migrations.sql"
+
+      - name: Run migration script on Azure SQL Database
+        run:
+          SQLCMD -S ${{ steps.resourceNames.outputs.sqlServerName }}.database.windows.net
+          -d starter-sql-db
+          -U ${{ secrets.AZURE_DB_ADMIN_USER }}
+          -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
+          -i "./src/Infrastructure/bin/db-migrations.sql" -G

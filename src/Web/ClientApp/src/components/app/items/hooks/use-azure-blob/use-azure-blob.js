@@ -9,7 +9,9 @@ export default (initialState) => {
 	useEffect(() => {
 		async function fetchData() {
 			const response = await getAccessToken({
-				scopes: [process.env.REACT_APP_AAD_API_SCOPE],
+				scopes: [
+					`${process.env.REACT_APP_AAD_API_APP_CLIENT_ID}/StarterApp.ReadWrite`,
+				],
 			});
 
 			const headers = {

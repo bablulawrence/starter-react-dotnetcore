@@ -5,7 +5,7 @@
     "keyVaultName": {
       "value": "GEN-UNIQUE"
     },
-    "webAppName": {
+    "objectId": {
       "value": "GEN-UNIQUE"
     }
   }

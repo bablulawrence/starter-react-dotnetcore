@@ -2,18 +2,66 @@ name: Deploy web app
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+    paths:
+      - "/src/Web/**"
   pull_request:
-    branches: [master]
+    branches:
+      - master
+    paths:
+      - "/src/Web/**"
   workflow_dispatch:
 
 jobs:
-  build:
+  deployWebApp:
+    name: Deploy web app to Azure App Service
     runs-on: ubuntu-latest
 
     steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Github checkout
         uses: actions/checkout@v2
+
+      - name: Get Azure resource names
+        id: resourceNames
+        uses: whiteducksoftware/azure-arm-action-js@v4
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
+          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+
+      #Update environment variable values in .env file
+      - name: Update Azure AD tenant id in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AadTenantId__"
+          replace: ${{ secrets.AZURE_AD_TENANT_ID }}
+          include: ".env"
+      - name: Update Azure AD client id the of the client app in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AadClentAppClientId__"
+          replace: ${{ secrets.AZURE_AD_CLIENT_APP_CLIENT_ID }}
+          include: ".env"
+      - name: Update Azure AD client id of the api app in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AadApiAppClientId__"
+          replace: ${{ secrets.AZURE_AD_API_APP_CLIENT_ID }}
+          include: ".env"
+      - name: Update storage account name in the environment file
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "__AzureStrgAcctName__"
+          replace: ${{ steps.resourceNames.outputs.storageAccountName }}
+          include: ".env"
 
       #Setup, build and test app
       - name: Setup .NET Core
@@ -31,8 +79,8 @@ jobs:
         env:
           CI: false
 
-      - name: Publish to Azure App Service
+      - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
           package: "./reactdotnet"
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE}}
+          app-name: ${{ steps.resourceNames.outputs.webAppName}}

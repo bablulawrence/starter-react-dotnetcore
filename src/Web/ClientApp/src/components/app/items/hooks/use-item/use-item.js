@@ -19,13 +19,15 @@ export default () => {
 	const { getAccessToken } = useContext(AppContext);
 
 	const [getBlobUri, uploadBlob] = useAzureBlob({
-		storageAccountName: process.env.REACT_APP_AZ_STRG_ACCT_NAME,
+		storageAccountName: process.env.REACT_APP_AZURE_STRG_ACCT_NAME,
 		containerName: 'items',
 	});
 
 	async function getToken() {
 		const response = await getAccessToken({
-			scopes: [process.env.REACT_APP_AAD_API_SCOPE],
+			scopes: [
+				`${process.env.REACT_APP_AAD_API_APP_CLIENT_ID}/StarterApp.ReadWrite`,
+			],
 		});
 
 		return response.accessToken;

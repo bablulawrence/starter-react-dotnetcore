@@ -4,12 +4,6 @@
   "parameters": {
     "keyVaultName": {
       "value": "GEN-UNIQUE"
-    },
-    "secretName": {
-      "value": "GEN-UNIQUE"
-    },
-    "secretValue": {
-      "value": "GEN-UNIQUE"
     }
   }
 }

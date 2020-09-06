@@ -51,6 +51,13 @@
         "description": "Location for all resources."
       }
     },
+    "allowAzureIPs": {
+      "defaultValue": true,
+      "type": "bool",
+      "metadata": {
+        "description": "Allow Azure services to access server."
+      }
+    },
     "guid": {
       "type": "string",
       "defaultValue": "[newGuid()]",
@@ -72,6 +79,20 @@
       },
       "resources": [
         {
+          "condition": "[parameters('allowAzureIPs')]",
+          "type": "firewallRules",
+          "apiVersion": "2018-06-01-preview",
+          "name": "AllowAllWindowsAzureIps",
+          "location": "[parameters('location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+          ],
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          }
+        },
+        {
           "name": "[parameters('sqlDbName')]",
           "type": "databases",
           "apiVersion": "2019-06-01-preview",
@@ -82,7 +103,7 @@
           },
           "properties": {},
           "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', concat(parameters('sqlServerName')))]"
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
           ]
         }
       ]
