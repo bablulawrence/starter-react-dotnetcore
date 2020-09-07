@@ -8,12 +8,26 @@
       "value": "ItemManager"
     }
   ],
+  "oauth2Permissions": [
+    {
+      "adminConsentDescription": "Starter App Read and Write",
+      "adminConsentDisplayName": "Starter App Read and Write",
+      "id": "",
+      "isEnabled": true,
+      "lang": null,
+      "origin": "Application",
+      "type": "User",
+      "userConsentDescription": null,
+      "userConsentDisplayName": null,
+      "value": "StarterApp.ReadWrite"
+    }
+  ],
   "requiredResourceAccess": [
     {
-      "resourceAppId": "00000002-0000-0000-c000-000000000000",
+      "resourceAppId": "00000003-0000-0000-c000-000000000000",
       "resourceAccess": [
         {
-          "id": "a42657d6-7f20-40e3-b6f0-cee03008a62a",
+          "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
           "type": "Scope"
         }
       ]
