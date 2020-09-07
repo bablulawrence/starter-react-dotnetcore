@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deployArm:
+  azureResources:
     name: Create Azure resources and update settings
     runs-on: windows-latest
     steps:
@@ -29,7 +29,7 @@ jobs:
             almSpAadObjectId=${{ secrets.AZURE_SERVICE_PRINCIPAL_OBJECT_ID }}
             githubRepository=${{ github.repository }}
 
-      - name: Update web app name in SQL script for adding MSI user
+      - name: Update Web App name in SQL script for adding MSI user
         run: |
           ((Get-Content -path  .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql).replace('web-app-name','${{ steps.deployArm.outputs.webAppName }}') | Set-Content -Path .\src\Infrastructure\Cloud\AzureSqlDb\msi-user.sql)
 
@@ -41,7 +41,7 @@ jobs:
           -P ${{ secrets.AZURE_DB_ADMIN_PASSWORD }}
           -i "./src/Infrastructure/Cloud/AzureSqlDb/msi-user.sql" -G
 
-      - name: Update web app app settings
+      - name: Update Web App App Settings
         id: appSettings
         uses: azure/appservice-settings@v1
         with:
@@ -80,5 +80,6 @@ jobs:
             "alwaysOn": "false",
             "webSocketsEnabled": "false"
             }'
-      - name: Display web app url
-        run: echo "Web app url - ${{ steps.appSettings.outputs.webapp-url }}"
+
+      - name: Display Web App url
+        run: echo ${{ steps.appSettings.outputs.webapp-url}}

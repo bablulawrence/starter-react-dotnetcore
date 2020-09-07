@@ -1,0 +1,80 @@
+name: Create Azure AD App Registrations
+
+on:
+  workflow_dispatch:
+
+jobs:
+  aadAppRegistration:
+    name: Create Azure AD App Registrations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Github checkout
+        uses: actions/checkout@v2
+
+      - name: Get Azure resource names
+        id: resourceNames
+        uses: whiteducksoftware/azure-arm-action-js@v4
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
+          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+
+      - name: Generate unique id for API App scope.
+        id: guidGen
+        run: echo "::set-output name=scopeId::$(uuidgen)"
+
+      - name: Create Azure Ad App Registration for API App.
+        env:
+          API_APP_URL: "https://api.${{ steps.resourceNames.outputs.webAppName }}.azurewebsites.net"
+        uses: azure/CLI@v1
+        id: apiAppReg
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            MANIFEST_FILE="./src/Infrastructure/Cloud/Aad/aad-api-app-manifest.json"
+            APP_ID=$(az ad app create --display-name "${{secrets.APP_NAME_PREFIX}} API App" \
+            --identifier-uris $API_APP_URL \
+            --oauth2-allow-implicit-flow false \
+            --app-roles @$MANIFEST_FILE \
+            --required-resource-accesses @$MANIFEST_FILE --query appId --output tsv)
+
+            DEFAULT_SCOPE=$(az ad app show --id $APP_ID | 
+            jq '.oauth2Permissions[0].isEnabled = false' | 
+            jq -r '.oauth2Permissions')
+
+            az ad app update --id $APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
+            az ad app update --id $APP_ID --set oauth2Permissions='[]'
+
+            NEW_SCOPE=$(cat $MANIFEST_FILE |
+              jq -r --arg SCOPE_ID ${{ steps.guidGen.outputs.scopeId }} '(.oauth2Permissions[] | .id )=$SCOPE_ID' |
+              jq -r .oauth2Permissions)
+            az ad app update --id $APP_ID --set oauth2Permissions="$NEW_SCOPE"
+
+            echo "::set-output name=appId::$APP_ID"
+            echo "::set-output name=scopeId::$SCOPE_ID"
+
+      - name: Create Azure Ad App Registration for Client app.
+        env:
+          CLIENT_APP_URL: "https://${{ steps.resourceNames.outputs.webAppName }}.azurewebsites.net"
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            APP_ID=$(az ad app create --display-name "${{secrets.APP_NAME_PREFIX}} Client App" \
+            --identifier-uris $CLIENT_APP_URL \
+            --oauth2-allow-implicit-flow true \
+            --reply-urls $CLIENT_APP_URL "$CLIENT_APP_URL/auth.html" \
+            --query appId --output tsv)
+
+            DEFAULT_SCOPE=$(az ad app show --id $APP_ID |
+            jq '.oauth2Permissions[0].isEnabled = false' |
+            jq -r '.oauth2Permissions')
+            az ad app update --id $APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
+            az ad app update --id $APP_ID --set oauth2Permissions='[]'
