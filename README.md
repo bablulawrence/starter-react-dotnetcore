@@ -1,4 +1,11 @@
-# A starter project template for React and .Net core MVC
+# A starter template for React and ASP.NET core SPA
+
+Starter template for setting up a React and ASP.NET core SPA application in Azure.
+
+- The app is capable of performing basic CRUD operations against Azure SQL Server Database and Azure Blob Storage.
+- Azure Search and Azure Redis Cache is used for providing search and server side caching.
+- Azure Active Directory is used for authentication.
+- Deployment is fully automated using Github actions.
 
 ## Deployment
 
@@ -6,15 +13,7 @@
 
 Fork this repo by clicking the `fork` button on the top-right of the repository page.
 
-### 2. Create Azure Active Directory App Registrations
-
-1. Register Api app
-
-
-
-### 3. Add Github Secrets
-
-### 4. Create an Azure Resource Group
+### 2. Create an Azure Resource Group
 
 Create a resource group to deploy Azure resources required for the app. You can do this by running below Azure CLI command in Azure Cloud Shell.
 
@@ -22,25 +21,37 @@ Create a resource group to deploy Azure resources required for the app. You can 
 
 `e.g. az group create --location southeastasia --name starter-app`
 
+### 3. Get Azure Active Directory object id for database admin user
+
+Azure AD object id of the user who should have admin access on Azure SQL database. You can find this by navigating to Azure Active Directory -> Users in Azure Portal or running below command Azure CLI command.
+`az ad user show --id <User Principal Name> --query objectId --out tsv`
+
+e.g `az ad user show --id myuser@contoso.com --query objectId --out tsv`
+
+### 4. Add Github Secrets
+
+| #   | Secret Name                       | Description                                                                                    |
+| --- | --------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 1   | AZURE_CREDENTIALS                 | Service Principal Details for deployment                                                       |
+| 2   | AZURE_SERVICE_PRINCIPAL_OBJECT_ID | Azure AD Object Id of the Service Principal used for Azure deployment                          |
+| 3   | AZURE_SUBSCRIPTION_ID             | Azure Subscription for deployment                                                              |
+| 4   | AZURE_RESOURCE_GROUP              | Azure Resource Group for deployment from step 2.                                               |
+| 5   | APP_NAME_PREFIX                   | Application name prefix. This will be used as a prefix for Azure resource names e.g. `Starter` |
+| 6   | AZURE_AD_TENANT_ID                | Azure AD tenant id                                                                             |
+| 7   | AZURE_DB_ADMIN_AAD_OBJECT_ID      | Azure AD Object Id of the database admin user                                                  |
+| 8   | AZURE_DB_ADMIN_PASSWORD           | Password of the database admin user                                                            |
+
 ### 5. Run Github workflows
 
-Go to `Actions` in your forked repository. You will find following workflows. You can them manually using the workflow_dispatch event triggers.
+Go to `Actions` in your forked repository. You will find following workflows. You can run them manually using the workflow_dispatch event triggers.
 
-| #   | Workflow                   | Description                                       | Sequence | Triggers                        |
-| --- | -------------------------- | ------------------------------------------------- | -------- | ------------------------------- |
-| 1   | Create Azure Resources     | Creates azure resources using ARM template        | first    | Manual                          |
-| 2   | Deploy web app             | Deploys the web app to Azure App Service          | after 1  | Manual and Web app changes      |
-| 3   | Deploy database migrations | Applies database migrations to Azure Sql database | after 1  | Manual and DB migration changes |
+| #   | Workflow                          | Description                                       | Sequence | Triggers                        |
+| --- | --------------------------------- | ------------------------------------------------- | -------- | ------------------------------- |
+| 1   | Create Azure Resources            | Creates azure resources using ARM template        | first    | Manual                          |
+| 2   | Create Azure Ad App Registrations | Register API and Client Apps in Azure AD          | after 1  | Manual                          |
+| 3   | Deploy web app                    | Deploys the web app to Azure App Service          | after 1  | Manual and Web app changes      |
+| 4   | Deploy database migrations        | Applies database migrations to Azure Sql database | after 1  | Manual and DB migration changes |
 
-1. Run `Create Azure Resources` workflow to create azure by clicking `Run work flow` button on the right side of the workflow. You need to supply following parameter values.
+## 6. References
 
-   - Azure Resource Group Name: Name of the Azure Resource Group created in step 2.
-
-   - App Name: Name of the app. This will be used as a prefix for Azure resource names.
-
-   - Azure Active Directory object id for database admin user: Azure AD object id of the user who should have admin access on Azure SQL database. You can find this by navigating to Azure Active Directory -> Users in Azure Portal or running below command Azure CLI command.
-     `az ad user show --id <User Principal Name> --query objectId --out tsv`
-
-   e.g `az ad user show --id myuser@contoso.com --query objectId --out tsv`
-
-## References
+1. https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app
