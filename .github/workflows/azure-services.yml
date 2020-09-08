@@ -1,4 +1,4 @@
-name: Create Azure resources
+name: Create Azure Resources
 
 on:
   workflow_dispatch:
@@ -24,7 +24,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
-          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+          parameters: appNamePrefix=${{ secrets.APP_NAME_PREFIX }}
             dbAdminAadObjectId=${{ secrets.AZURE_DB_ADMIN_AAD_OBJECT_ID }}
             almSpAadObjectId=${{ secrets.AZURE_SERVICE_PRINCIPAL_OBJECT_ID }}
             githubRepository=${{ github.repository }}

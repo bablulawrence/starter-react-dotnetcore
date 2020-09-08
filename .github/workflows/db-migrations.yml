@@ -1,4 +1,4 @@
-name: Deploy database migrations
+name: Deploy Database Migrations
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
-          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+          parameters: appNamePrefix=${{ secrets.APP_NAME_PREFIX }}
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1

@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appName": {
+    "appNamePrefix": {
       "type": "string",
       "defaultValue": "starter",
       "metadata": {
@@ -83,7 +83,7 @@
       "metadata": {
         "description": "String for uniquely identifying resources"
       },
-      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appName'))]"
+      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appNamePrefix'))]"
     }
   },
   "variables": {
@@ -101,7 +101,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "appName": { "value": "[parameters('appName')]" },
+          "appNamePrefix": {
+            "value": "[toLower(parameters('appNamePrefix'))]"
+          },
           "uniqueString": { "value": "[parameters('uniqueString')]" }
         }
       }

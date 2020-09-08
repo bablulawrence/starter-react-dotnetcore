@@ -24,7 +24,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
-          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+          parameters: appNamePrefix=${{ secrets.APP_NAME_PREFIX }}
 
       - name: Generate unique id for API App scope.
         id: guidGen
@@ -48,7 +48,6 @@ jobs:
             DEFAULT_SCOPE=$(az ad app show --id $APP_ID | 
             jq '.oauth2Permissions[0].isEnabled = false' | 
             jq -r '.oauth2Permissions')
-
             az ad app update --id $APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
             az ad app update --id $APP_ID --set oauth2Permissions='[]'
 
@@ -56,6 +55,8 @@ jobs:
               jq -r --arg SCOPE_ID ${{ steps.guidGen.outputs.scopeId }} '(.oauth2Permissions[] | .id )=$SCOPE_ID' |
               jq -r .oauth2Permissions)
             az ad app update --id $APP_ID --set oauth2Permissions="$NEW_SCOPE"
+
+            az ad sp create --id $APP_ID
 
             echo "::set-output name=appId::$APP_ID"
             echo "::set-output name=scopeId::$SCOPE_ID"
@@ -73,8 +74,21 @@ jobs:
             --reply-urls $CLIENT_APP_URL "$CLIENT_APP_URL/auth.html" \
             --query appId --output tsv)
 
+            az ad app permission add --id $APP_ID \
+            --api 00000003-0000-0000-c000-000000000000 \
+            --api-permissions e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope
+
+            az ad app permission add --id $APP_ID \
+            --api ${{ steps.apiAppReg.outputs.appId }} \
+            --api-permissions ${{ steps.guidGen.outputs.scopeId }}=Scope
+
             DEFAULT_SCOPE=$(az ad app show --id $APP_ID |
             jq '.oauth2Permissions[0].isEnabled = false' |
             jq -r '.oauth2Permissions')
             az ad app update --id $APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
             az ad app update --id $APP_ID --set oauth2Permissions='[]'
+
+            az ad sp create --id $APP_ID
+
+            az ad app permission grant --id $APP_ID --api 00000003-0000-0000-c000-000000000000 
+            az ad app permission grant --id $APP_ID --api ${{ steps.apiAppReg.outputs.appId }}

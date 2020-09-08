@@ -1,4 +1,4 @@
-name: Deploy web app
+name: Deploy Web App
 
 on:
   push:
@@ -15,7 +15,7 @@ on:
 
 jobs:
   deployWebApp:
-    name: Deploy web app to Azure App Service
+    name: Deploy Web App to Azure App Service
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +35,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
-          parameters: appName=${{ secrets.APP_NAME_PREFIX }}
+          parameters: appNamePrefix=${{ secrets.APP_NAME_PREFIX }}
 
       #Update environment variable values in .env file
       - name: Update Azure AD tenant id in the environment file

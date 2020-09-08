@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appName": {
+    "appNamePrefix": {
       "type": "string",
       "defaultValue": "starter",
       "metadata": {
@@ -14,20 +14,20 @@
       "metadata": {
         "description": "String for uniquely identifying resources"
       },
-      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appName'))]"
+      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appNamePrefix'))]"
     }
   },
   "variables": {
     "keyVaultName": "[concat('kv-',parameters('uniqueString'))]",
-    "sqlServerName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-sql-server')]",
-    "sqlDbName": "[concat(parameters('appName'),'-sql-db')]",
+    "sqlServerName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-sql-server')]",
+    "sqlDbName": "[concat(parameters('appNamePrefix'),'-sql-db')]",
     "storageAccountName": "[concat('stor',parameters('uniqueString'))]",
-    "redisCacheName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-redis-cache')]",
-    "azureSearchName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-azure-search')]",
-    "workspaceName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-workspace')]",
-    "appInsightsName": "[concat(parameters('appName'),'-app-insights')]",
-    "appServicePlanName": "[concat(parameters('appName'),'-app-service-plan')]",
-    "webAppName": "[concat(parameters('appName'),'-',parameters('uniqueString'),'-web-app')]"
+    "redisCacheName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-redis-cache')]",
+    "azureSearchName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-azure-search')]",
+    "workspaceName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-workspace')]",
+    "appInsightsName": "[concat(parameters('appNamePrefix'),'-app-insights')]",
+    "appServicePlanName": "[concat(parameters('appNamePrefix'),'-app-service-plan')]",
+    "webAppName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-web-app')]"
   },
   "resources": [],
   "outputs": {
