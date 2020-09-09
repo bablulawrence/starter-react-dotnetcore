@@ -48,13 +48,13 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "__AadClentAppClientId__"
-          replace: ${{ secrets.AZURE_AD_CLIENT_APP_CLIENT_ID }}
+          replace: "https://${{ steps.resourceNames.outputs.webAppName}}.azurewebsites.net"
           include: ".env"
       - name: Update Azure AD client id of the api app in the environment file
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "__AadApiAppClientId__"
-          replace: ${{ secrets.AZURE_AD_API_APP_CLIENT_ID }}
+          replace: "https://api.${{ steps.resourceNames.outputs.webAppName}}.azurewebsites.net"
           include: ".env"
       - name: Update storage account name in the environment file
         uses: jacobtomlinson/gha-find-replace@master
