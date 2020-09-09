@@ -102,7 +102,7 @@
         },
         "parameters": {
           "appNamePrefix": {
-            "value": "[toLower(parameters('appNamePrefix'))]"
+            "value": "[parameters('appNamePrefix')]"
           },
           "uniqueString": { "value": "[parameters('uniqueString')]" }
         }

@@ -14,20 +14,20 @@
       "metadata": {
         "description": "String for uniquely identifying resources"
       },
-      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appNamePrefix'))]"
+      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, toLower(parameters('appNamePrefix')))]"
     }
   },
   "variables": {
     "keyVaultName": "[concat('kv-',parameters('uniqueString'))]",
-    "sqlServerName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-sql-server')]",
-    "sqlDbName": "[concat(parameters('appNamePrefix'),'-sql-db')]",
+    "sqlServerName": "[concat(toLower(parameters('appNamePrefix')),'-',parameters('uniqueString'),'-sql-server')]",
+    "sqlDbName": "[concat(toLower(parameters('appNamePrefix')),'-sql-db')]",
     "storageAccountName": "[concat('stor',parameters('uniqueString'))]",
-    "redisCacheName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-redis-cache')]",
-    "azureSearchName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-azure-search')]",
-    "workspaceName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-workspace')]",
-    "appInsightsName": "[concat(parameters('appNamePrefix'),'-app-insights')]",
-    "appServicePlanName": "[concat(parameters('appNamePrefix'),'-app-service-plan')]",
-    "webAppName": "[concat(parameters('appNamePrefix'),'-',parameters('uniqueString'),'-web-app')]"
+    "redisCacheName": "[concat(toLower(parameters('appNamePrefix')),'-',parameters('uniqueString'),'-redis-cache')]",
+    "azureSearchName": "[concat(toLower(parameters('appNamePrefix')),'-',parameters('uniqueString'),'-azure-search')]",
+    "workspaceName": "[concat(toLower(parameters('appNamePrefix')),'-',parameters('uniqueString'),'-workspace')]",
+    "appInsightsName": "[concat(toLower(parameters('appNamePrefix')),'-app-insights')]",
+    "appServicePlanName": "[concat(toLower(parameters('appNamePrefix')),'-app-service-plan')]",
+    "webAppName": "[concat(toLower(parameters('appNamePrefix')),'-',parameters('uniqueString'),'-web-app')]"
   },
   "resources": [],
   "outputs": {
