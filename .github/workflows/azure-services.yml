@@ -47,9 +47,13 @@ jobs:
         with:
           app-name: ${{ steps.deployArm.outputs.webAppName }}
           app-settings-json: '[
-            { "name": "AzureAd__ClientId", "value": "${{ secrets.AZURE_AD_API_APP_CLIENT_ID }}",  "slotSetting": false  },
             { "name": "AzureAd__TenantId", "value": "${{ secrets.AZURE_AD_TENANT_ID }}",  "slotSetting": false  },
             { "name": "KeyVaultName", "value": "${{steps.deployArm.outputs.keyVaultName}}",  "slotSetting": false  },
+            {
+            "name": "AzureAd__ClientId",
+            "value": "https://api.${{ steps.deployArm.outputs.webAppName }}.azurewebsites.net",
+            "slotSetting": false
+            },
             {
             "name": "RedisCache__clientName",
             "value": "${{ steps.deployArm.outputs.redisCacheName }}.redis.cache.windows.net:6380",

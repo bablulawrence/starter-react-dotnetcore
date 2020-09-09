@@ -77,13 +77,6 @@
     "deployKeyVaultSecrets": {
       "type": "bool",
       "defaultValue": true
-    },
-    "uniqueString": {
-      "type": "string",
-      "metadata": {
-        "description": "String for uniquely identifying resources"
-      },
-      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id, parameters('appNamePrefix'))]"
     }
   },
   "variables": {
@@ -103,8 +96,7 @@
         "parameters": {
           "appNamePrefix": {
             "value": "[parameters('appNamePrefix')]"
-          },
-          "uniqueString": { "value": "[parameters('uniqueString')]" }
+          }
         }
       }
     },
