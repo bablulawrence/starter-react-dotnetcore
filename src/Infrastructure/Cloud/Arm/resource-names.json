@@ -53,7 +53,7 @@
     },
     "workspaceName": {
       "type": "string",
-      "value": "[variables('azureSearchName')]"
+      "value": "[variables('workspaceName')]"
     },
     "appInsightsName": {
       "type": "string",
