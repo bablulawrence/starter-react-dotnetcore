@@ -51,8 +51,7 @@ jobs:
             APP_ID=$(az ad app create --display-name "${{secrets.APP_NAME_PREFIX}} API App" \
             --identifier-uris $API_APP_URL \
             --oauth2-allow-implicit-flow false \
-            --app-roles @$MANIFEST_FILE \
-            --required-resource-accesses @$MANIFEST_FILE --query appId --output tsv)
+            --app-roles @$MANIFEST_FILE --query appId --output tsv)
 
             DEFAULT_SCOPE=$(az ad app show --id $APP_ID | 
             jq '.oauth2Permissions[0].isEnabled = false' | 
