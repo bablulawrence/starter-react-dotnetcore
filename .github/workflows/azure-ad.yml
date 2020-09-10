@@ -16,13 +16,22 @@ jobs:
       - name: Github checkout
         uses: actions/checkout@v2
 
+      - name: Get Subscription ID and Resource Group Name
+        uses: azure/CLI@v1
+        id: context
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            echo "::set-output name=subscriptionId::$(az account list --query [0].id --output tsv)"
+            echo "::set-output name=resourceGroupName::$(az group list --query [0].name --output tsv)"
+
       - name: Get Azure resource names
         id: resourceNames
         uses: whiteducksoftware/azure-arm-action-js@v4
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          subscriptionId: ${{ steps.context.outputs.subscriptionId }}
+          resourceGroupName: ${{ steps.context.outputs.resourceGroupName }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/resource-names.json"
           parameters: appNamePrefix=${{ secrets.APP_NAME_PREFIX }}
 

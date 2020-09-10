@@ -12,17 +12,28 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
       - name: Github checkout
         uses: actions/checkout@v2
+
+      - name: Get AAD Tenant ID, Subscription ID and Resource Group Name
+        id: context
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "3.1.0"
+          inlineScript: |
+            echo "::set-output name=subscriptionId::$((Get-AzContext).Subscription.id)"
+            echo "::set-output name=tenantId::$((Get-AzContext).Tenant.id)"
+            echo "::set-output name=resourceGroupName::$((Get-AzResourceGroup).ResourceGroupName)"
 
       - name: Deploy ARM templates
         uses: whiteducksoftware/azure-arm-action-js@v4
         id: deployArm
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          subscriptionId: ${{ steps.context.outputs.subscriptionId }}
+          resourceGroupName: ${{ steps.context.outputs.resourceGroupName }}
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
           parameters: appNamePrefix=${{ secrets.APP_NAME_PREFIX }}
             dbAdminAadObjectId=${{ secrets.AZURE_DB_ADMIN_AAD_OBJECT_ID }}
@@ -46,7 +57,7 @@ jobs:
         with:
           app-name: ${{ steps.deployArm.outputs.webAppName }}
           app-settings-json: '[
-            { "name": "AzureAd__TenantId", "value": "${{ secrets.AZURE_AD_TENANT_ID }}",  "slotSetting": false  },
+            { "name": "AzureAd__TenantId", "value": "${{ steps.context.outputs.tenantId }}",  "slotSetting": false  },
             { "name": "KeyVaultName", "value": "${{steps.deployArm.outputs.keyVaultName}}",  "slotSetting": false  },
             {
             "name": "AzureAd__ClientId",
