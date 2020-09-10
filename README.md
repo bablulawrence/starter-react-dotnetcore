@@ -30,16 +30,13 @@ e.g `az ad user show --id myuser@contoso.com --query objectId --out tsv`
 
 ### 4. Add Github Secrets
 
-| #   | Secret Name                       | Description                                                                                    |
-| --- | --------------------------------- | ---------------------------------------------------------------------------------------------- |
-| 1   | AZURE_CREDENTIALS                 | Service Principal Details for deployment                                                       |
-| 2   | AZURE_SERVICE_PRINCIPAL_OBJECT_ID | Azure AD Object Id of the Service Principal used for Azure deployment                          |
-| 3   | AZURE_SUBSCRIPTION_ID             | Azure Subscription for deployment                                                              |
-| 4   | AZURE_RESOURCE_GROUP              | Azure Resource Group for deployment from step 2.                                               |
-| 5   | APP_NAME_PREFIX                   | Application name prefix. This will be used as a prefix for Azure resource names e.g. `Starter` |
-| 6   | AZURE_AD_TENANT_ID                | Azure AD tenant id                                                                             |
-| 7   | AZURE_DB_ADMIN_AAD_OBJECT_ID      | Azure AD Object Id of the database admin user                                                  |
-| 8   | AZURE_DB_ADMIN_PASSWORD           | Password of the database admin user                                                            |
+| #   | Secret Name                  | Description                                                                                    |
+| --- | ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| 1   | AZURE_CREDENTIALS            | Service Principal Details for deployment                                                       |
+| 2   | APP_NAME_PREFIX              | Application name prefix. This will be used as a prefix for Azure resource names e.g. `Starter` |
+| 3   | AZURE_DB_ADMIN_USER          | User name of the Azure SQL database admin user                                                 |
+| 4   | AZURE_DB_ADMIN_AAD_OBJECT_ID | Azure AD Object Id of the Azure database admin user                                            |
+| 5   | AZURE_DB_ADMIN_PASSWORD      | Password of the Azure database admin user                                                      |
 
 ### 5. Run Github workflows
 
