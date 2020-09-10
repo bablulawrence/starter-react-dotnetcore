@@ -15,12 +15,6 @@
         "description": "Azure Active directory object id of the AD admin user"
       }
     },
-    "almSpAadObjectId": {
-      "type": "string",
-      "metadata": {
-        "description": "Object id of the Service Principal used for deploying app"
-      }
-    },
     "githubRepository": {
       "type": "string",
       "metadata": {
@@ -269,28 +263,6 @@
         }
       },
       "dependsOn": ["ResourceNames"]
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
-      "name": "KeyVaultPolicyAlmSp",
-      "condition": "[parameters('deployKeyVaultPolicyAlmSp')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'), 'key-vault-policy.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "keyVaultName": {
-            "value": "[reference('ResourceNames').outputs.keyVaultName.value]"
-          },
-          "objectId": {
-            "value": "[parameters('almSpAadObjectId')]"
-          }
-        }
-      },
-      "dependsOn": ["ResourceNames", "KeyVault"]
     },
     {
       "type": "Microsoft.Resources/deployments",

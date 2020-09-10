@@ -26,7 +26,6 @@ jobs:
           templateLocation: "./src/Infrastructure/Cloud/Arm/link-template.json"
           parameters: appNamePrefix=${{ secrets.APP_NAME_PREFIX }}
             dbAdminAadObjectId=${{ secrets.AZURE_DB_ADMIN_AAD_OBJECT_ID }}
-            almSpAadObjectId=${{ secrets.AZURE_SERVICE_PRINCIPAL_OBJECT_ID }}
             githubRepository=${{ github.repository }}
 
       - name: Update Web App name in SQL script for adding MSI user
