@@ -1,4 +1,4 @@
-# A starter template for Azure Web App using React and .Net Core
+# A Starter template for React & ASP.NET Core App in Azure
 
 Starter template for creating a Single Page Application using React, ASP.NET core and Azure.
 
@@ -29,7 +29,8 @@ Run below command to create a Service Principal scoped to the resource group cre
 
 ```azurecli
 az ad sp create-for-rbac --name "StarterAppSP" \
---role contributor --scopes /subscriptions/{subscription id}/resourceGroups/{resource group name} \
+--role contributor \
+--scopes /subscriptions/{subscription id}/resourceGroups/{resource group name} \
 --sdk-auth
 ```
 
@@ -37,11 +38,12 @@ example :
 
 ```azurecli
 az ad sp create-for-rbac --name "StarterAppSP" \
---role contributor --scopes /subscriptions/1ee5ed92-933d-4c51-ac9f-96329a4273f7/resourceGroups/starter-app-rg
+--role contributor \
+--scopes /subscriptions/1ee5ed92-933d-4c51-ac9f-96329a4273f7/resourceGroups/starter-app-rg
 --sdk-auth
 ```
 
-The output will be like :
+output will be like :
 
 ```azurecli
 {
@@ -53,7 +55,7 @@ The output will be like :
 }
 ```
 
-hold on to this, you will need this [step 6](#6-add-github-secrets).
+hold on to this, you will need this in [step 6](#6-add-github-secrets).
 
 ### 4. Assign Azure AD Global Administrator Role to the Service Principal
 
