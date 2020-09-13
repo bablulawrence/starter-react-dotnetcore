@@ -1,10 +1,23 @@
 # A Starter template for React & ASP.NET Core App in Azure
 
-Starter template for creating a Single Page Application using React, ASP.NET core and Azure.
+Building a React & ASP.NET Core app and deploying to Azure is rather straight forward. However building one ready ready for production can become quite complicated because you might want to:
 
-- The app is capable of performing basic CRUD operations against Azure SQL Server Database and Azure Blob Storage.
-- Azure Search and Azure Redis Cache is used for providing search and server side caching.
-- Azure Active Directory is used for authentication.
+- Use additional services such as Azure Storage, Azure Search, Azure Redis cache and therefore need a scalable way to add the service APIs to your application code.
+- Implement best practices for accessing these services from your app, such as Azure Managed Service Identity(MSI) and Azure Key Vault.
+- Implement Authentication using Azure AD, Single Sign On(SSO), OpenId Connect, OAuth 2.0, MFA etc.
+- Fully automate provisioning of Azure resources.
+- Implement CI/CD.
+
+This is a template app, created with the intent of solving some of these problems, helpful for quick starting React & ASP.NET development in Azure. The core domain is kept as plain CRUD, so that it can be refactored to into your app quickly. Here are the key features :
+
+- Single Page Application using React UI and ASP.NET Core API.
+- Capable of performing basic CRUD operations against Azure SQL Server Database and Azure Blob Storage. i.e creating, listing, updating, and deleting a bunch of items with an attached file.
+- Azure Search is used for searching items and Azure Redis Cache for server side caching.
+- Services and dependency injection is used in the .NET Core API for encapsulating storage, search and cache features.
+- Client side state management using React hooks, custom hook for Azure Blob Storage.
+- No secrets, keys, passwords are stored in config files. API accesses Azure SQL Db and Storage Account using MSI. Azure Search and Redis Cache are accessed by key retrieved from Azure Key Vault which in turn is accessed using MSI. Client app access the Azure Blob Storage using SAS token provided by the API.
+- Azure Active Directory, OpenId Connect, OAuth 2.0 and implicit grant flow is used for authentication.
+- Azure AD Application Roles is used for assigning permission to uses.
 - Deployment is fully automated using Github actions.
 
 ## Deployment
@@ -98,6 +111,10 @@ Under `Actions` in your forked repository, you will find following workflows. Ru
 | 3   | Deploy Web App                    | Deploys the web app to Azure App Service          | run after 1 | Manual and web app code changes      |
 | 4   | Deploy Database Migrations        | Applies database migrations to Azure Sql database | run after 1 | Manual and DB migration code changes |
 
+You will get the url of the app from the output of step 1.
+
 ## 6. References
 
 1. https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app
+
+2. https://kentcdodds.com/blog/application-state-management-with-react/
