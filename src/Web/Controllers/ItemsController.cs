@@ -83,6 +83,7 @@ namespace Web.Controllers
             return Ok(ItemsOutDto);
         }
 
+        //Get item by id
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -110,6 +111,7 @@ namespace Web.Controllers
             return Ok(ItemDtoOut);
         }
 
+        //Search items using query parameters
         [HttpGet("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<DocumentSearchResult<ItemSm>> SearchAsync([FromQuery] string searchText,
@@ -119,6 +121,7 @@ namespace Web.Controllers
             return await _searchService.SearchAsync<ItemSm>(_searchIndexName, searchText, searchFields, select);
         }
 
+        //Search items using parameters in post body 
         [HttpPost("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<DocumentSearchResult<ItemSm>> SearchAsync([FromQuery] string searchText,
@@ -127,7 +130,7 @@ namespace Web.Controllers
             return await _searchService.SearchAsync<ItemSm>(_searchIndexName, searchText, parameters);
         }
 
-
+        //Create item. This requires 'ItemManager' role assigned to user in Azure AD.
         [HttpPost]
         [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -153,6 +156,7 @@ namespace Web.Controllers
             return Created(new Uri(Request.GetEncodedUrl()).ToString() + "/" + ItemDtoOut.ItemId, ItemDtoOut);
         }
 
+        //Modify item. This requires 'ItemManager' role assigned to user in Azure AD.
         [HttpPut("{id}")]
         [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -183,7 +187,7 @@ namespace Web.Controllers
             return Ok(ItemDtoOut);
         }
 
-
+        //Delete item. This requires 'ItemManager' role assigned to user in Azure AD.
         [HttpDelete("{id}")]
         [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -221,8 +225,8 @@ namespace Web.Controllers
             }
         }
 
+        //Get blob storage container SAS key. 
         [HttpGet("key")]
-        [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetContainerKey(int permissions = 1, int expireDurationInHours = 1)
@@ -241,6 +245,7 @@ namespace Web.Controllers
             }
         }
 
+        //Create search index. 
         [HttpPost("searchindex")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<DocumentIndexResult> IndexAsync()
@@ -260,6 +265,7 @@ namespace Web.Controllers
             return new DocumentIndexResult(results);
         }
 
+        //Delete search index. 
         [HttpDelete("searchindex")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteIndexAsync()
