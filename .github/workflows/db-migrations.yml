@@ -5,12 +5,12 @@ on:
     branches:
       - master
     paths:
-      - "/src/Infrastructure/Data/Migrations/**"
+      - "src/Infrastructure/Data/Migrations/**"
   pull_request:
     branches:
       - master
     paths:
-      - "/src/Infrastructure/Data/Migrations/**"
+      - "src/Infrastructure/Data/Migrations/**"
   workflow_dispatch:
 
 jobs:
