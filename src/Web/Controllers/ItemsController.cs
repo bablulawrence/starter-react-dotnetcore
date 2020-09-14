@@ -129,7 +129,7 @@ namespace Web.Controllers
 
 
         [HttpPost]
-        // [Authorize(Roles = "ItemManager")]
+        [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(ItemDto ItemDto)
@@ -154,7 +154,7 @@ namespace Web.Controllers
         }
 
         [HttpPut("{id}")]
-        // [Authorize(Roles = "ItemManager")]
+        [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(int Id, [FromBody] ItemDto ItemDto)
@@ -185,7 +185,7 @@ namespace Web.Controllers
 
 
         [HttpDelete("{id}")]
-        // [Authorize(Roles = "ItemManager")]
+        [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int Id)
@@ -222,7 +222,7 @@ namespace Web.Controllers
         }
 
         [HttpGet("key")]
-        // [Authorize(Roles = "ItemManager")]
+        [Authorize(Roles = "ItemManager")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetContainerKey(int permissions = 1, int expireDurationInHours = 1)
@@ -271,43 +271,5 @@ namespace Web.Controllers
             }
             else return NotFound();
         }
-
-        // [HttpPost("searchindex/{id}")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // public async Task<DocumentIndexResult> IndexAsync(int Id)
-        // {
-        //     if (!await _searchService.CheckIndexExists(_searchIndexName))
-        //         await _searchService.CreateIndexAsync<ItemSm>(_searchIndexName);
-
-        //     var Items = _dbContext.Items
-        //             .Where(c => c.ItemId == Id)
-        //             .Select(_mapper.Map<Item, ItemSm>);
-
-        //     return await _searchService.UploadDocumentsAsync(_searchIndexName, Items.ToArray());
-        // }
-
-        // [HttpDelete("searchindex/{id}")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // public async Task<IActionResult> DeleteIndexAsync(int Id)
-        // {
-
-        //     if (await _searchService.CheckIndexExists(_searchIndexName))
-        //     {
-        //         var items = _dbContext.Items
-        //                 .Where(c => c.ItemId == Id)
-        //                 .Select(_mapper.Map<Item, ItemSm>);
-
-        //         List<IndexingResult> results = new List<IndexingResult>();
-        //         foreach (var batchItems in items.Batch(_batchRange))
-        //         {
-        //             var deleteResponse = await _searchService.DeleteDocumentsAsync(_searchIndexName, batchItems.ToArray());
-        //             results.AddRange(deleteResponse.Results);
-        //         }
-
-        //         return Ok();
-        //     }
-        //     return NotFound();
-        // }
-
     }
 }
