@@ -2,13 +2,13 @@
 
 Building a React & ASP.NET Core app and deploying to Azure is rather straight forward. However building one ready ready for production can become quite complicated because you might want to:
 
-- Use additional services such as Azure Storage, Azure Search, Azure Redis cache and therefore need a scalable way to add the service APIs to your application code.
+- Use additional services like Azure Storage, Azure Search, Azure Redis cache and therefore need a scalable way to add the service APIs to your application code.
 - Implement best practices for accessing these services from your app, such as Azure Managed Service Identity(MSI) and Azure Key Vault.
 - Implement Authentication using Azure AD, Single Sign On(SSO), OpenId Connect, OAuth 2.0, MFA etc.
 - Fully automate provisioning of Azure resources.
 - Implement CI/CD.
 
-This is a template app, created with the intent of solving some of these problems, helpful for quick starting React & ASP.NET development in Azure. The core domain is kept as plain CRUD, so that it can be refactored to into your app quickly. Here are the key features :
+This is a template app, created with the intent of solving some of these problems, helpful for quick starting React & ASP.NET development in Azure. The core domain is kept as plain CRUD, so that it can be refactored to into your app quickly. Key features are :
 
 - Single Page Application using React UI and ASP.NET Core API.
 - Entity Framework Core and code first migrations.
@@ -19,7 +19,7 @@ This is a template app, created with the intent of solving some of these problem
 - No secrets, keys, passwords are stored in config files. API accesses Azure SQL Db and Storage Account using MSI. Azure Search and Redis Cache are accessed by key retrieved from Azure Key Vault which in turn is accessed using MSI. Client app access the Azure Blob Storage using SAS token provided by the API.
 - Azure Active Directory, OpenId Connect, OAuth 2.0 and implicit grant flow is used for authentication.
 - Azure AD Application Roles as used for assigning permission to uses.
-- Deployment is fully automated using Github actions.
+- Deployment is fully automated using Github actions. In around 30 mins, you will a working app with all the above features.
 
 ## Deploying the app to Azure
 
@@ -96,7 +96,7 @@ Create the following secrets variables under your repository - _Settings -> Secr
 | #   | Secret Name                  | Description                                                                                                                   |
 | --- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | 1   | APP_NAME_PREFIX              | Application name prefix. This will be used as a prefix for Azure resource names e.g. `Starter`                                |
-| 2   | AZURE_CREDENTIALS            | Service Principal Details for deployment, [output of step 2](#3-create-a-service-principal-for-azure-deployment)              |
+| 2   | AZURE_CREDENTIALS            | Service Principal Details for deployment, [output of step 3](#3-create-a-service-principal-for-azure-deployment)              |
 | 3   | AZURE_DB_ADMIN_AAD_OBJECT_ID | Azure AD Object Id of the Azure database admin user, [output of step 5](#5-get-azure-ad-object-id-of-the-database-admin-user) |
 | 4   | AZURE_DB_ADMIN_USER          | User name of the Azure SQL database admin user e.g. `myuser@mydomain.com`                                                     |
 | 5   | AZURE_DB_ADMIN_PASSWORD      | Password of the Azure database admin user                                                                                     |
@@ -150,7 +150,7 @@ You need below software and tools for ideal development experience :
 
 The [.env.development](/src/Web/ClientApp/.env.development) file holds the Azure AD details for the Client App. Similarly [appsettings.json](/src/Web/appsettings.json) and [appsettings.development.json](/src/Web/appsettings.development.json) together hold the values for the API app. Update all three files with Azure AD and Azure Resource details.
 
-### 4. Running the app
+### 4. Run the app
 
 Execute `dotnet run` from folder `/src/Web` to run the API app and `npm start` from folder `/src/Web/ClientApp` to run the Client App. You can also run them together from VS Code or Visual Studio.
 
